@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import logo365 from "../../assets/logos/365.svg";
+import adverity from "../../assets/logos/adverity.svg";
+import cannyx from "../../assets/logos/cannyx.png";
+import jlr from "../../assets/logos/jaguar-land-rover.png";
+import skoda from "../../assets/logos/skoda.svg";
+import uefa from "../../assets/logos/uefa.svg";
+
+// Heights match the optical sizes Framer used at 1440px. They're set explicitly
+// because some SVGs ship without width/height and collapse with h-auto.
+const logos = [
+  { src: logo365, alt: "365", h: 61 },
+  { src: adverity, alt: "Adverity", h: 37 },
+  { src: cannyx, alt: "Cannyx Markets", h: 49 },
+  { src: jlr, alt: "Jaguar Land Rover", h: 56 },
+  { src: skoda, alt: "Škoda", h: 88 },
+  { src: uefa, alt: "UEFA", h: 45 },
+];
+---
+
+<section class="page mt-24 lg:mt-32" aria-labelledby="worked-with">
+  <h2 id="worked-with" class="font-sans text-label font-normal text-muted lg:pl-6">Worked with</h2>
+  <!--
+    Framer showed these on a grey slab in dark mode. Instead they render as
+    monochrome marks in dark mode so they sit on the page background.
+  -->
+  <ul
+    class="mt-8 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:flex lg:justify-between lg:px-6"
+    role="list"
+  >
+    {
+      logos.map(({ src, alt, h }) => (
+        <li class="reveal flex justify-center">
+          <Image
+            src={src}
+            alt={alt}
+            height={h}
+            style={`height:${h}px`}
+            class="w-auto max-w-[11rem] object-contain max-lg:scale-90 dark:opacity-70 dark:brightness-0 dark:invert"
+          />
+        </li>
+      ))
+    }
+  </ul>
+</section>

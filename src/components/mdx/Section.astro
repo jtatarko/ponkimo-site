@@ -1,0 +1,29 @@
+---
+/**
+ * A case-study chapter: heading in the left column (sticky on desktop),
+ * text in the right column. Without a title the left column stays empty.
+ */
+interface Props {
+  title?: string;
+  /** Draw a hairline above the section, as Framer did between chapters. */
+  divider?: boolean;
+}
+const { title, divider = false } = Astro.props;
+const id = title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+---
+
+<section
+  id={id}
+  class:list={[
+    "page grid gap-y-6 py-12 lg:grid-cols-2 lg:py-20",
+    divider &&
+      "relative before:absolute before:inset-x-gutter before:top-0 before:h-px before:bg-line",
+  ]}
+>
+  <div>
+    {title && <h2 class="reveal text-heading lg:sticky lg:top-[calc(var(--spacing-nav)+2rem)] lg:pr-12">{title}</h2>}
+  </div>
+  <div class="prose-cs max-w-[35rem]">
+    <slot />
+  </div>
+</section>

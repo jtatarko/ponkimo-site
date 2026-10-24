@@ -1,0 +1,52 @@
+---
+/** Silent looping clip (replaces Framer's autoplay video blocks). */
+interface Props {
+  /** Path under /public, e.g. /media/frog/demo.mp4 */
+  src: string;
+  label: string;
+  poster?: string;
+  caption?: string;
+  size?: "column" | "wide" | "bleed" | "left" | "right";
+  /** Intrinsic aspect ratio, avoids layout shift before metadata loads. */
+  ratio?: string;
+}
+const { src, label, poster, caption, size = "column", ratio = "16 / 9" } = Astro.props;
+const wrap = {
+  column: "",
+  wide: "page",
+  bleed: "w-full",
+  left: "page lg:pr-[30%]",
+  right: "page lg:pl-[30%]",
+}[size];
+---
+
+<figure class:list={["reveal my-10 lg:my-16", wrap]}>
+  <video
+    class="h-auto w-full rounded-lg bg-line/30"
+    style={`aspect-ratio:${ratio}`}
+    src={src}
+    poster={poster}
+    aria-label={label}
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"></video>
+  {caption && <figcaption class="mt-3 text-caption text-muted">{caption}</figcaption>}
+</figure>
+
+<script>
+  // Pause clips while off-screen and honour reduced motion.
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const io = new IntersectionObserver((entries) => {
+    for (const { target, isIntersecting } of entries) {
+      const v = target as HTMLVideoElement;
+      if (isIntersecting && !reduce) v.play().catch(() => {});
+      else v.pause();
+    }
+  });
+  document.querySelectorAll<HTMLVideoElement>("figure video[autoplay]").forEach((v) => {
+    if (reduce) v.removeAttribute("autoplay");
+    io.observe(v);
+  });
+</script>

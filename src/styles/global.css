@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@import "@fontsource-variable/open-sans/wght.css";
+@import "@fontsource-variable/open-sans/wght-italic.css";
+@import "@fontsource-variable/montserrat/wght.css";
+@import "@fontsource-variable/montserrat/wght-italic.css";
+@import "@fontsource/fragment-mono/400.css";
+
+/*
+ * Design tokens. Names map to the Framer tokens they replace:
+ *   primary-content (752e2a17) -> content
+ *   primary-brand   (a09b360c) -> brand
+ *   fba0a587 -> muted, e9032dae -> line, 75185d0c -> bg, 3829b2eb -> nav
+ */
+@theme {
+  --font-sans: "Open Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fragment Mono", ui-monospace, monospace;
+
+  --color-bg: #fff;
+  --color-content: #333;
+  --color-muted: #8a8a8a;
+  --color-line: #d4d4d4;
+  --color-brand: #1201ff;
+  --color-nav: #ffffffe6;
+  --color-band: #1a1a1a;
+  --color-on-band: #fff;
+
+  /* Fluid type: mobile value -> desktop value at 1440px */
+  --text-display: clamp(3rem, 1.6rem + 5.6vw, 6.75rem);
+  --text-display--line-height: 1.1;
+  --text-title: clamp(2.5rem, 1.75rem + 3vw, 4.5rem);
+  --text-title--line-height: 1.15;
+  --text-heading: clamp(1.875rem, 1.45rem + 1.7vw, 3rem);
+  --text-heading--line-height: 1.25;
+  --text-lead: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
+  --text-lead--line-height: 1.45;
+  --text-intro: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --text-intro--line-height: 1.5;
+  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+  --text-body--line-height: 1.5;
+  --text-label: 1.125rem;
+  --text-label--line-height: 1.25;
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.45;
+
+  --container-page: 90rem;
+  --spacing-gutter: clamp(1rem, 5.5vw, 5rem);
+  --spacing-nav: 4rem;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1d1d1d;
+    --color-content: #9e9e9e;
+    /* Framer used #545454 here (~2.3:1); lifted to pass WCAG AA on bg. */
+    --color-muted: #868686;
+    --color-line: #363636;
+    --color-brand: #7088ff;
+    --color-nav: #1d1d1de6;
+    --color-band: #111;
+    --color-on-band: #e6e6e6;
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+    scroll-padding-top: calc(var(--spacing-nav) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-content);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-brand); color: #fff; }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@utility page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility link-brand {
+  color: var(--color-brand);
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+}
+
+/* Long-form case-study text column. */
+@utility prose-cs {
+  & > * + * { margin-top: 1.25em; }
+  & a { color: var(--color-brand); text-decoration: underline; text-underline-offset: 0.2em; }
+  & strong { font-weight: 600; color: var(--color-content); }
+  & ul, & ol { padding-left: 1.25em; }
+  & ul { list-style: disc; }
+  & ol { list-style: decimal; }
+  & li + li { margin-top: 0.5em; }
+  & li::marker { color: var(--color-muted); }
+  & blockquote {
+    border-left: 2px solid var(--color-brand);
+    padding-left: 1em;
+    font-style: italic;
+  }
+}
+
+/* Reveal-on-scroll; JS adds .is-visible. Disabled for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal:not(.is-visible) { opacity: 0; transform: translateY(24px); }
+  .reveal { transition: opacity 0.8s var(--ease-out-soft), transform 0.8s var(--ease-out-soft); }
+}

@@ -1,0 +1,38 @@
+---
+/** Click-to-load YouTube embed: no third-party requests until the visitor asks. */
+interface Props {
+  id: string;
+  title: string;
+}
+const { id, title } = Astro.props;
+const thumb = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+---
+
+<div class="page reveal my-12 lg:my-20">
+  <div class="relative mx-auto aspect-video max-w-[72rem] overflow-hidden rounded-lg bg-band" data-youtube={id}>
+    <img src={thumb} alt="" loading="lazy" decoding="async" class="absolute inset-0 size-full object-cover" />
+    <button
+      type="button"
+      class="absolute inset-0 grid place-items-center bg-black/20 transition-colors hover:bg-black/10"
+      aria-label={`Play video: ${title}`}
+    >
+      <span class="grid size-20 place-items-center rounded-full bg-brand text-white shadow-lg">
+        <svg viewBox="0 0 24 24" class="ml-1 size-8" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      </span>
+    </button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-youtube]").forEach((box) => {
+    box.querySelector("button")?.addEventListener("click", () => {
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${box.dataset.youtube}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      iframe.title = box.querySelector("button")?.getAttribute("aria-label")?.replace("Play video: ", "") ?? "Video";
+      iframe.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
+      iframe.allowFullscreen = true;
+      iframe.className = "absolute inset-0 size-full";
+      box.replaceChildren(iframe);
+    });
+  });
+</script>

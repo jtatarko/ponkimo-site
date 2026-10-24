@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"work">;
+}
+const { entry } = Astro.props;
+const { client, title, cardTitle, cardIllustration, cardBackdrop } = entry.data;
+---
+
+<li class="border-b border-line last:border-b-0">
+  <a
+    href={`/${entry.id}`}
+    class="group relative grid min-h-[22rem] items-end overflow-hidden px-6 py-10 lg:min-h-[35.5rem] lg:px-8"
+  >
+    {
+      cardBackdrop && (
+        <Image
+          src={cardBackdrop}
+          alt=""
+          widths={[600, 900, 1200]}
+          sizes="(min-width: 1024px) 900px, 100vw"
+          class="pointer-events-none absolute top-0 right-[-10%] h-full w-auto max-w-none opacity-[0.12] transition-opacity duration-500 group-hover:opacity-25 dark:opacity-[0.08] lg:right-[-12%]"
+        />
+      )
+    }
+    <Image
+      src={cardIllustration}
+      alt=""
+      widths={[400, 800]}
+      sizes="390px"
+      class="pointer-events-none absolute top-1/2 left-1/2 w-[min(70%,24rem)] -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 ease-out-soft group-hover:scale-[1.04] lg:left-[54%]"
+    />
+    <div class="reveal relative max-w-[32rem]">
+      <p class="text-intro font-semibold">{client}</p>
+      <h3 class="mt-1 text-heading">{cardTitle ?? title}</h3>
+      <span class="link-brand mt-6 inline-flex items-center gap-2 text-label">
+        Explore the story <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+      </span>
+    </div>
+  </a>
+</li>

@@ -1,0 +1,59 @@
+---
+import type { GetStaticPaths } from "astro";
+import { Image } from "astro:assets";
+import { getCollection, getEntry, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Mark from "../assets/svg/mark.svg";
+import * as mdx from "../components/mdx";
+
+export const getStaticPaths = (async () => {
+  const work = await getCollection("work", ({ data }) => import.meta.env.DEV || !data.draft);
+  return work.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const next = await getEntry(entry.data.next);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  ogImage={entry.data.hero}
+  next={next && { href: `/${next.id}`, label: next.data.title }}
+>
+  <article>
+    <header class="page grid items-center gap-10 pt-16 lg:grid-cols-2 lg:pt-24">
+      <div>
+        <Mark class="reveal h-[68px] w-[72px]" aria-hidden="true" />
+        <p class="reveal mt-8 text-intro font-semibold">{entry.data.client}</p>
+        <h1 class="reveal mt-2 text-title">{entry.data.title}</h1>
+      </div>
+      <Image
+        src={entry.data.hero}
+        alt={entry.data.heroAlt}
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 1024px) 576px, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="reveal mx-auto h-auto w-full max-w-[36rem]"
+      />
+    </header>
+
+    <Content components={mdx} />
+
+    {
+      next && (
+        <nav class="page mt-24 border-t border-line pt-12" aria-label="Next case study">
+          <a href={`/${next.id}`} class="group block">
+            <span class="text-label text-muted">Next: {next.data.client}</span>
+            <span class="mt-2 flex items-center gap-4 font-display text-heading font-medium">
+              {next.data.title}
+              <span aria-hidden="true" class="text-brand transition-transform group-hover:translate-x-2">→</span>
+            </span>
+          </a>
+        </nav>
+      )
+    }
+  </article>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+import { Image } from "astro:assets";
+import Mark from "../../assets/svg/mark.svg";
+import process from "../../assets/home/process-scribble.svg";
+import { site } from "../../data/site";
+---
+
+<section class="page pt-16 lg:pt-28">
+  <div class="lg:px-16">
+    <Mark class="reveal h-[68px] w-[72px]" aria-hidden="true" />
+    <div class="mt-6 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <h1 class="reveal text-display">
+        Innovative<br />Products,<br /><em class="font-medium">Faster</em><span class="text-brand">.</span>
+      </h1>
+      <p class="reveal max-w-[28rem] text-intro lg:mb-4 lg:mr-[3%]">
+        {site.author} |<br />{site.role}
+      </p>
+    </div>
+  </div>
+
+  <!-- Research -> Concept -> Design scribble: ambiguity resolving into clarity. -->
+  <figure class="reveal mt-16 lg:px-16">
+    <Image
+      src={process}
+      alt="A tangled line that gradually straightens out, moving from Research (ambiguity, patterns, insights) through Concept to Design (clarity, focus)."
+      class="h-auto w-full"
+      loading="eager"
+    />
+  </figure>
+
+  <ul class="mt-8 flex flex-wrap justify-center gap-x-3 gap-y-1 text-intro text-muted" role="list">
+    {
+      site.skills.map((skill, i) => (
+        <li class="flex items-center gap-3">
+          {i > 0 && <span aria-hidden="true">•</span>}
+          {skill}
+        </li>
+      ))
+    }
+  </ul>
+</section>

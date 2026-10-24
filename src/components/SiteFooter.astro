@@ -1,0 +1,37 @@
+---
+import { site } from "../data/site";
+---
+
+<!--
+  Framer revealed this footer from behind the page as you scrolled past the
+  end. Same effect here: <main> sits above it (z-10) and the footer is sticky.
+-->
+<footer class="sticky bottom-0 z-0 overflow-hidden bg-band text-on-band">
+  <video
+    class="absolute inset-0 size-full object-cover opacity-60 motion-reduce:hidden"
+    src="/media/footer-loop.mp4"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="none"
+    aria-hidden="true"></video>
+  <div class="page relative flex min-h-[min(800px,90dvh)] flex-col justify-center gap-16 py-24">
+    <a
+      href={site.links.linkedin}
+      target="_blank"
+      rel="me noopener"
+      class="group flex max-w-4xl gap-6 font-display text-heading font-medium text-white"
+    >
+      <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+      <span class="underline-offset-8 group-hover:underline">
+        Let’s design a cutting-edge product to solve a next big problem.
+      </span>
+    </a>
+    <div class="flex flex-wrap gap-x-8 gap-y-2 text-label text-on-band/80">
+      <a class="hover:text-white" href={site.links.linkedin} target="_blank" rel="me noopener">LinkedIn</a>
+      <a class="hover:text-white" href={site.links.behance} target="_blank" rel="me noopener">Behance</a>
+      <span class="ml-auto">© {new Date().getFullYear()} {site.author}</span>
+    </div>
+  </div>
+</footer>

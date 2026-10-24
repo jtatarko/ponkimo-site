@@ -1,0 +1,12 @@
+---
+/** Full-width dark strip for showcase imagery. */
+interface Props {
+  label?: string;
+}
+const { label } = Astro.props;
+---
+
+<div class="my-12 bg-band py-6 text-on-band lg:my-20 [&_figure]:my-4 [&_figcaption]:text-on-band/70">
+  {label && <p class="page text-caption text-on-band/70">{label}</p>}
+  <slot />
+</div>

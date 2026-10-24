@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/home/Hero.astro";
+import Intro from "../components/home/Intro.astro";
+import LogoStrip from "../components/home/LogoStrip.astro";
+import ProjectCard from "../components/home/ProjectCard.astro";
+import { site } from "../data/site";
+
+const work = (await getCollection("work", ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout>
+  <Hero />
+  <Intro />
+  <LogoStrip />
+
+  <section class="page mt-24 lg:mt-32" aria-label="Case studies">
+    <ul role="list">
+      {work.map((entry) => <ProjectCard entry={entry} />)}
+    </ul>
+  </section>
+
+  <section class="page mt-16 lg:mt-24">
+    <p class="reveal text-intro lg:px-8">
+      Projects from further back live on Behance.<br />
+      <a href={site.links.behance} class="link-brand" target="_blank" rel="me noopener">Explore the archive →</a>
+    </p>
+  </section>
+</BaseLayout>

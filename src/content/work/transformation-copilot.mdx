@@ -1,0 +1,203 @@
+---
+title: "Transforming Transformations with AI"
+client: "Adverity"
+description: "When AI buzz filled every boardroom, Adverity’s stakeholders wanted in. At the same time, we had a backlog full of unsolved user…"
+order: 3
+hero: ../../assets/work/transformation-copilot/VfM36IiQheGefzqnepLQgLU8gIU.png
+heroAlt: "TODO: describe hero illustration"
+cardIllustration: ../../assets/work/transformation-copilot/VfM36IiQheGefzqnepLQgLU8gIU.png
+cardBackdrop: ../../assets/work/transformation-copilot/ZHXbAirzvgJgBvdUeS6Hvj78.png
+next: frog-design-system
+---
+
+import img_nLoy1ozN9L from "../../assets/work/transformation-copilot/nLoy1ozN9L8r6oGfNXURN6ZeaD0.png";
+import img_EjZNgi3tlg from "../../assets/work/transformation-copilot/EjZNgi3tlgvRtj55qL1ZlNkCv4.svg";
+import img_tAjq9hYv4R from "../../assets/work/transformation-copilot/tAjq9hYv4REhsjUeytw5JNUsc.png";
+import img_ivYZJGKWFn from "../../assets/work/transformation-copilot/ivYZJGKWFnPYgyt0iJU1qNxI8g.webp";
+import img_bEtWf6IliZ from "../../assets/work/transformation-copilot/bEtWf6IliZJdPXJSiHX04A1z6JY.png";
+import img_jYUb3mNX23 from "../../assets/work/transformation-copilot/jYUb3mNX23wWsLL0JLMSpT4gQY.png";
+import img_1dutqxMobE from "../../assets/work/transformation-copilot/1dutqxMobEGDv1U0SrwxUiO8ct0.png";
+import img_qogcQG8dp2 from "../../assets/work/transformation-copilot/qogcQG8dp21ZDuzpSUUhCiGFu2k.svg";
+import img_sY0TOL7AWy from "../../assets/work/transformation-copilot/sY0TOL7AWyZQxjd7VdHC6vRj13w.svg";
+import img_8pyW8Hm4wi from "../../assets/work/transformation-copilot/8pyW8Hm4wi162GDtcDLBEZ6UG54.png";
+import img_YD1VWdqYwA from "../../assets/work/transformation-copilot/YD1VWdqYwAa70ff5WmDWYHTA3w.png";
+import img_0Hsbt6EZye from "../../assets/work/transformation-copilot/0Hsbt6EZyeQA3dziSCw56erS8.png";
+import img_oplwCCC9zG from "../../assets/work/transformation-copilot/oplwCCC9zGE6qF3yRRtRAFcwq3o.png";
+
+<Lead>
+
+When AI buzz filled every boardroom, Adverity’s stakeholders wanted in.\
+At the same time, we had a backlog full of *unsolved user pain*.
+
+</Lead>
+
+<Figure src={img_nLoy1ozN9L} alt="TODO: describe image" size="wide" />
+
+<Section>
+
+The stakes were high. Tasked with bringing the first AI solution into a complex ETL platform and coming off a just-canceled project. My team and me knew this was our chance to shine.
+
+*What pain do our users feel most?*
+
+</Section>
+
+<Section title="Opportunity" divider>
+
+*Where do they lose the most time?*
+
+*What would actually help them feel empowered?*
+
+Our discovery started as *collaboration with the UX research team*, identifying opportunities from our repository using [Condens app](https://condens.io/) + reaching out to support team to get recurring topics in tickets.
+
+The collected data provided us with a list of themes we prioritized. Our formula: *Frequency of a pain point × Number of tier A customers (highest ARR*) mentioning the issue × KANO model weight ÷ Feasibility score (evaluated by developers) =* Opportunity Score
+
+*Annual Recurring Revenue
+
+Using the score, we ended with a shortlist of opportunities for the data science team to explore through experiments.\
+Following Adverity's *Discoverer process*: a blend of Shape Up and Design Sprint, we focused on learning fast and so many experiments quickly reached dead ends due to insufficient data or high technical costs.
+
+<Figure src={img_EjZNgi3tlg} alt="TODO: describe image" />
+
+Eventually one clear winner emerged:\
+*Data Transformations*, a critical part of the ETL (Extract, Transform, Load) process, used by a broad spectrum of users, from Python-savvy experts to absolute newcomers.\
+Data showed that users frequently relied on extensive documentation or Adverity support for assistance.\
+This pain point wasn’t just common: *it was strategic*. Reducing support tickets was a top-level OKR tied directly to improving ROI.
+
+Themes from research repository
+
+</Section>
+
+<Figure src={img_tAjq9hYv4R} alt="TODO: describe image" size="right" />
+
+<Section title="Plan" divider>
+
+Our plan seemed clear and feasible. We took an *LLM* (via OpenAI’s API), *fine-tuned it* using data from documentation and support tickets, and developed a *conversational assistant*.
+
+But reality hit fast.\
+During early testing with customer-facing teams, data transformation experts reported frequent hallucinations. They also pointed us to the root cause: *outdated documentation*.
+
+Like other internal tech debts, it had never made it to the top of the roadmap. Now it was front and center, undermining our AI and inflating support volume.
+
+</Section>
+
+<Video src="/media/transformation-copilot/JZbaIyOPbFppmyPujdB2pvXOkA.mp4" label="TODO: describe clip" ratio="1008 / 562" size="right" />
+
+<Figure src={img_ivYZJGKWFn} alt="TODO: describe image" size="right" />
+
+<Section title="Pivot" divider>
+
+We hit pause and got back to the drawing board. If documentation couldn’t be trusted, we needed a new foundation. This time, we partnered *directly with internal data transformation experts.* Using a simple feedback UI, they reviewed assistant responses, flagged inaccuracies, and provided corrections. Every manual label made the model smarter.\
+We also rebalanced the training data, giving *more weight to real, resolved support tickets*: ground truth over idealized help articles.
+
+Yes, it raised the project’s complexity and cost. But investors were watching closely, and AI was still the centerpiece of our product vision. We made our case and *secured extra funding.*\
+Better yet, our revised strategy created a second benefit: expert-reviewed responses could now be fed back into our documentation, improving it in parallel.
+
+*One system. Two wins.*
+
+Example of classifying an answer
+
+</Section>
+
+<Figure src={img_bEtWf6IliZ} alt="TODO: describe image" size="right" />
+
+<Section title="It worked!" divider>
+
+We had traction. While the assistant wasn’t flawless, the number of cases requiring expert intervention dropped noticeably. It handled more of the repetitive, time-consuming queries *freeing up our support team* to focus on complex edge cases and faster response times.
+
+Each resolved interaction became part of a *continuous improvement loop.* Expert-reviewed answers were fed back into the model, sharpening its accuracy. Fewer follow-up questions meant fewer API calls, which translated into lower costs and better performance.
+
+— Efficiency improved. Precision grew. *And trust followed.—*
+
+</Section>
+
+<Video src="/media/transformation-copilot/SMrg5QyvcJU0OJkFl3YTO4ByX8.mp4" label="TODO: describe clip" ratio="1114 / 630" size="wide" />
+
+<Figure src={img_jYUb3mNX23} alt="TODO: describe image" size="right" />
+
+<Testimonial name="Roman Gavuliak" role="Director of Data Science at Adverity">
+
+I have worked with Jakub on several ***innovative projects.*** He's always eager to pioneer and take inspiration from the right places to come up with a working design. His level-headed and constructive nature enabled him to adjust to the pace of the iterative process of software development, and ***brought a fruitful collaboration***.
+
+</Testimonial>
+
+<PullQuote>
+
+I have worked with Jakub on several ***innovative projects.*** He's always eager to pioneer and take inspiration from the right places to come up with a working design. His level-headed and constructive nature enabled him to adjust to the pace of the iterative process of software development, and ***brought a fruitful collaboration***.
+
+</PullQuote>
+
+<Figure src={img_1dutqxMobE} alt="TODO: describe image" size="wide" />
+
+<FigureGrid>
+  <Figure src={img_qogcQG8dp2} alt="TODO: describe image" />
+  <Figure src={img_sY0TOL7AWy} alt="TODO: describe image" width={417} />
+</FigureGrid>
+
+<Section>
+
+First data showing adoption (source: Zendesk, Mixpanel)
+
+</Section>
+
+<Section title="Designing for AI" divider>
+
+Designing a conversational assistant was about crafting a personality, building trust, and setting expectations in a space full of unknowns.
+
+I faced new challenges:
+
+- How do we reflect the brand’s tone of voice in the assistant’s responses?\
+- How do we gracefully handle irrelevant questions or edge cases?\
+- How do we signal limitations without eroding trust?
+
+To address this, we teamed up with data scientists again this time to define a set of known data transformation intents. These acted as anchors for response quality and let us craft replies that were not only context-aware but also human in tone.
+
+We designed fallback interactions that balanced clarity with charm. Even in error states, the assistant stayed helpful and a bit playful ;)
+
+</Section>
+
+<FigureGrid>
+  <Figure src={img_8pyW8Hm4wi} alt="TODO: describe image" />
+  <Figure src={img_YD1VWdqYwA} alt="TODO: describe image" />
+</FigureGrid>
+
+<Section>
+
+It was here that conversation design became a *part of our design system*. And it was the UX community through shared resources like [*shapeof.ai*](https://www.shapeof.ai/) that guided me through unfamiliar territory. Thanks.
+
+</Section>
+
+<PullQuote>
+
+User: *"Do you like strawberry pasta?"*
+
+AI Assistant: *"That’s a creative twist! Data transformations require a dash of creativity too. What transformation can I help you cook?"*
+
+</PullQuote>
+
+<Figure src={img_0Hsbt6EZye} alt="TODO: describe image" size="wide" />
+
+<Section title="Next Level" divider>
+
+Once the assistant launched, feedback came fast and with it, a clear direction for what came next. Users wanted more than explanations. *They wanted execution.*
+
+We envisioned a future where the assistant could offer *personalized suggestions* and apply data transformations directly, moving from advisor to action-taker.\
+This step came with new challenges:
+
+- *Trust:* users needed full visibility before allowing any automated action. The assistant would have to explain its intended steps clearly, enabling users to confirm or reject them.\
+- *Security* was non-negotiable. Because the assistant handled sensitive data, we had to guarantee strict isolation between customer environments: no overlap, no leakage.
+
+The project moved again into the pitching phase with the vision of an assistant that not only understands your data problems, but *solves them: securely, transparently, and in real time*.
+
+</Section>
+
+<Figure src={img_oplwCCC9zG} alt="TODO: describe image" size="wide" />
+
+<Section>
+
+***"Copilot makes information about data transformations easily accessible."***
+
+***"Creating custom transformations is much quicker with the Copilot."***
+
+***"A great companion to troubleshoot or sense-check data transformations."***
+
+</Section>

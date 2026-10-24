@@ -1,0 +1,16 @@
+---
+/** Two (or three) figures side by side, stacked on mobile. Children are <Figure>s. */
+interface Props {
+  cols?: 2 | 3;
+}
+const { cols = 2 } = Astro.props;
+---
+
+<div
+  class:list={[
+    "page my-10 grid items-start gap-8 lg:my-16 [&>figure]:my-0",
+    cols === 3 ? "md:grid-cols-3" : "md:grid-cols-2",
+  ]}
+>
+  <slot />
+</div>
