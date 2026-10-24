@@ -2,11 +2,18 @@
 /** Row of short outcome statements, e.g. "Validated market fit". */
 interface Props {
   items: { title: string; text?: string }[];
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
 }
-const { items } = Astro.props;
+const { items, gap } = Astro.props;
 ---
 
-<ul class="page my-16 grid gap-10 md:grid-cols-3 lg:my-24" role="list">
+<ul
+  class="page my-16 grid gap-10 md:grid-cols-3 lg:my-24"
+  role="list"
+  data-gap={gap !== undefined ? "" : undefined}
+  style={gap !== undefined ? `--gap:${gap}` : undefined}
+>
   {
     items.map(({ title, text }) => (
       <li class="reveal border-t border-line pt-6">

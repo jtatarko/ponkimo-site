@@ -1,20 +1,33 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 interface Props {
   name: string;
   role?: string;
+  avatar?: ImageMetadata;
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
 }
-const { name, role } = Astro.props;
+const { name, role, avatar, gap } = Astro.props;
 ---
 
-<figure class="page reveal my-16 text-center lg:my-28">
+<figure
+  class="page reveal my-12 text-center lg:my-20"
+  data-gap={gap !== undefined ? "" : undefined}
+  style={gap !== undefined ? `--gap:${gap}` : undefined}
+>
   <div class="mx-auto max-w-[45rem]">
     <span aria-hidden="true" class="block font-sans text-[6.75rem] leading-[0.6] text-brand">“</span>
     <blockquote class="mt-6 text-lead [&>*+*]:mt-[1em]">
       <slot />
     </blockquote>
-    <figcaption class="mt-8">
-      <span class="block text-intro font-semibold">{name}</span>
-      {role && <span class="block text-caption text-muted">{role}</span>}
+    <figcaption class="mt-8 inline-flex items-center gap-4 text-left">
+      {avatar && <Image src={avatar} alt="" width={54} height={54} class="size-[54px] rounded-full object-cover" />}
+      <span>
+        <span class="block text-intro font-semibold">{name}</span>
+        {role && <span class="block text-caption text-muted">{role}</span>}
+      </span>
     </figcaption>
   </div>
 </figure>

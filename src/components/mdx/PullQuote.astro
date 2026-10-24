@@ -1,8 +1,17 @@
 ---
 /** Centred large-type passage without attribution (e.g. a dialogue sample). */
+interface Props {
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
+}
+const { gap } = Astro.props;
 ---
 
-<div class="page reveal my-16 lg:my-24">
+<div
+  class="page reveal my-16 lg:my-24"
+  data-gap={gap !== undefined ? "" : undefined}
+  style={gap !== undefined ? `--gap:${gap}` : undefined}
+>
   <div class="mx-auto max-w-[45rem] text-lead [&>*+*]:mt-[1em]">
     <slot />
   </div>

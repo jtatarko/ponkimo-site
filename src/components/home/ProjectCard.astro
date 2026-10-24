@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import Arrow from "../../assets/svg/arrow.svg";
 
 interface Props {
   entry: CollectionEntry<"work">;
@@ -9,10 +10,14 @@ const { entry } = Astro.props;
 const { client, title, cardTitle, cardIllustration, cardBackdrop } = entry.data;
 ---
 
+<!--
+  Geometry follows Framer at 1440px: 570px tall card, illustration at 38% from
+  the left, faded product screenshot from 48% running off the right edge.
+-->
 <li class="border-b border-line last:border-b-0">
   <a
     href={`/${entry.id}`}
-    class="group relative grid min-h-[22rem] items-end overflow-hidden px-6 py-10 lg:min-h-[35.5rem] lg:px-8"
+    class="group relative grid min-h-[30rem] items-end px-6 py-12 max-lg:pt-64 lg:min-h-[35.5rem] lg:items-center lg:px-8 lg:py-16"
   >
     {
       cardBackdrop && (
@@ -21,7 +26,7 @@ const { client, title, cardTitle, cardIllustration, cardBackdrop } = entry.data;
           alt=""
           widths={[600, 900, 1200]}
           sizes="(min-width: 1024px) 900px, 100vw"
-          class="pointer-events-none absolute top-0 right-[-10%] h-full w-auto max-w-none opacity-[0.12] transition-opacity duration-500 group-hover:opacity-25 dark:opacity-[0.08] lg:right-[-12%]"
+          class="pointer-events-none absolute top-[-4%] left-[30%] w-[90%] max-w-none opacity-[0.13] transition-opacity duration-500 group-hover:opacity-25 lg:left-[48%] lg:w-[69%] dark:opacity-[0.08]"
         />
       )
     }
@@ -29,14 +34,15 @@ const { client, title, cardTitle, cardIllustration, cardBackdrop } = entry.data;
       src={cardIllustration}
       alt=""
       widths={[400, 800]}
-      sizes="390px"
-      class="pointer-events-none absolute top-1/2 left-1/2 w-[min(70%,24rem)] -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 ease-out-soft group-hover:scale-[1.04] lg:left-[54%]"
+      sizes="(min-width: 1024px) 389px, 70vw"
+      class="pointer-events-none absolute top-8 left-1/2 w-[min(60%,16rem)] -translate-x-1/2 transition-transform duration-500 ease-out-soft group-hover:scale-[1.04] lg:top-[40%] lg:left-[38%] lg:w-[30%] lg:max-w-[389px] lg:translate-x-0 dark:invert dark:hue-rotate-180"
     />
-    <div class="reveal relative max-w-[32rem]">
+    <div class="reveal relative max-w-[500px] lg:mt-16">
       <p class="text-intro font-semibold">{client}</p>
       <h3 class="mt-1 text-heading">{cardTitle ?? title}</h3>
-      <span class="link-brand mt-6 inline-flex items-center gap-2 text-label">
-        Explore the story <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+      <span class="link-brand mt-8 inline-flex items-center gap-2 text-label lg:mt-14">
+        Explore the story
+        <Arrow class="h-[9px] w-[14px] transition-transform group-hover:translate-x-1" aria-hidden="true" />
       </span>
     </div>
   </a>

@@ -1,12 +1,15 @@
 ---
-/** Full-width dark strip for showcase imagery. */
+/** Full-width dark strip behind a <Canvas> of showcase imagery. */
 interface Props {
-  label?: string;
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
 }
-const { label } = Astro.props;
+const { gap } = Astro.props;
 ---
 
-<div class="my-12 bg-band py-6 text-on-band lg:my-20 [&_figure]:my-4 [&_figcaption]:text-on-band/70">
-  {label && <p class="page text-caption text-on-band/70">{label}</p>}
+<div
+  data-gap={gap !== undefined ? "" : undefined}
+  style={gap !== undefined ? `--gap:${gap}` : undefined}
+  class="my-10 bg-band py-2 text-on-band lg:my-12 [&_.canvas]:my-6 [&_.text-muted]:text-on-band/70">
   <slot />
 </div>

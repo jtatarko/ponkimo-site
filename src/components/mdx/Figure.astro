@@ -3,48 +3,48 @@ import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
 /**
- * size:
- *  - column: fits the text column it sits in (default inside <Section>)
- *  - wide:   page container width
- *  - bleed:  full viewport width
- *  - left / right: half the page, pinned to that side (Framer's offset shots)
+ * Inside a text column (default) the image fills the column.
+ * Inside a <Canvas>, pass `at={[x, y, w, h]}` in Framer pixels to place it.
+ * When the box ratio differs from the file, the image is cropped to the box
+ * (object-fit: cover), which is what Framer did.
  */
 interface Props {
   src: ImageMetadata;
   alt: string;
   caption?: string;
-  size?: "column" | "wide" | "bleed" | "left" | "right";
+  at?: [number, number, number, number?];
+  /** Box ratio "w / h" for figures outside a canvas. */
+  ratio?: string;
   /** Max rendered width in px, for small inline images. */
   width?: number;
+  /** Crop anchor (CSS object-position) when the box crops the image. */
+  pos?: string;
+  /** Extra space above, in px on desktop (aligns an aside with its paragraph). */
+  offset?: number;
   class?: string;
 }
-const { src, alt, caption, size = "column", width, class: className } = Astro.props;
-
-const wrap = {
-  column: "",
-  wide: "page",
-  bleed: "w-full",
-  left: "page lg:pr-[50%]",
-  right: "page lg:pl-[50%]",
-}[size];
-const sizes = {
-  column: "(min-width: 1024px) 560px, 100vw",
-  wide: "(min-width: 1440px) 1280px, 100vw",
-  bleed: "100vw",
-  left: "(min-width: 1024px) 50vw, 100vw",
-  right: "(min-width: 1024px) 50vw, 100vw",
-}[size];
+const { src, alt, caption, at, ratio, width, pos, offset, class: className } = Astro.props;
+const [x, y, w, h] = at ?? [];
+const box = at && h ? `${w} / ${h}` : ratio;
+const sizes = at
+  ? `(min-width: 1024px) ${Math.round((w! / 1440) * 100)}vw, 100vw`
+  : width
+    ? `${width}px`
+    : "(min-width: 1024px) 560px, 100vw";
 ---
 
-<figure class:list={["reveal my-10 lg:my-16", wrap, className]}>
-  {caption && size !== "column" && <figcaption class="mb-3 text-caption text-muted">{caption}</figcaption>}
+<figure
+  data-at={at ? "" : undefined}
+  style={at ? `--x:${x};--y:${y};--w:${w}` : offset ? `--offset:${offset}px` : undefined}
+  class:list={["reveal", !at && "my-10 first:mt-0 lg:my-12", offset && "lg:!mt-[var(--offset)]", className]}
+>
+  {caption && <figcaption class="mb-3 text-caption text-muted">{caption}</figcaption>}
   <Image
     src={src}
     alt={alt}
-    sizes={width ? `${width}px` : sizes}
-    widths={[480, 800, 1200, 1600, 2400].filter((w) => w <= src.width)}
-    style={width ? `max-width:${width}px` : undefined}
-    class="h-auto w-full"
+    sizes={sizes}
+    widths={[480, 800, 1200, 1600, 2400].filter((v) => v <= src.width)}
+    style={[box && `aspect-ratio:${box}`, width && `max-width:${width}px`, pos && `object-position:${pos}`].filter(Boolean).join(";") || undefined}
+    class:list={["w-full", box ? "object-cover" : "h-auto"]}
   />
-  {caption && size === "column" && <figcaption class="mt-3 text-caption text-muted">{caption}</figcaption>}
 </figure>

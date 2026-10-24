@@ -130,3 +130,24 @@
   .reveal:not(.is-visible) { opacity: 0; transform: translateY(24px); }
   .reveal { transition: opacity 0.8s var(--ease-out-soft), transform 0.8s var(--ease-out-soft); }
 }
+
+/*
+ * Case-study rhythm on desktop: each top-level block carries the space
+ * Framer left above it (--gap, px at 1440 wide), scaled with the viewport.
+ * Below lg the components' own margins apply.
+ */
+@media (min-width: 64rem) {
+  [data-gap] {
+    margin-top: calc(var(--gap) / 1440 * min(100vw, var(--container-page))) !important;
+    margin-bottom: 0 !important;
+  }
+  section[data-gap] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  /* Chapter breaks: hairline halfway through the gap. */
+  section[data-gap][data-divider] {
+    margin-top: calc(var(--gap) / 2880 * min(100vw, var(--container-page))) !important;
+    padding-top: calc(var(--gap) / 2880 * min(100vw, var(--container-page))) !important;
+  }
+}

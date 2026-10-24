@@ -19,25 +19,29 @@ const next = await getEntry(entry.data.next);
 <BaseLayout
   title={entry.data.title}
   description={entry.data.description}
-  ogImage={entry.data.hero}
+  ogImage={entry.data.hero ?? entry.data.cardIllustration}
   next={next && { href: `/${next.id}`, label: next.data.title }}
 >
   <article>
-    <header class="page grid items-center gap-10 pt-16 lg:grid-cols-2 lg:pt-24">
-      <div>
+    <!-- Framer at 1440: mark at y=200, title 800px wide, illustration 576px at top right. -->
+    <header class="page relative pt-12 lg:pt-[8.5rem]">
+      {
+        entry.data.hero && (
+          <Image
+            src={entry.data.hero}
+            alt={entry.data.heroAlt}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 576px, 100vw"
+            loading="eager"
+            fetchpriority="high"
+            class="reveal mx-auto mb-8 h-auto w-full max-w-[24rem] lg:absolute lg:top-[5rem] lg:right-gutter lg:mb-0 lg:w-[40%] lg:max-w-[36rem]"
+          />
+        )
+      }
+      <div class="relative">
         <Mark class="reveal h-[68px] w-[72px]" aria-hidden="true" />
-        <p class="reveal mt-8 text-intro font-semibold">{entry.data.client}</p>
-        <h1 class="reveal mt-2 text-title">{entry.data.title}</h1>
+        <h1 class="reveal mt-4 max-w-[50rem] text-title">{entry.data.title}</h1>
       </div>
-      <Image
-        src={entry.data.hero}
-        alt={entry.data.heroAlt}
-        widths={[480, 800, 1200]}
-        sizes="(min-width: 1024px) 576px, 100vw"
-        loading="eager"
-        fetchpriority="high"
-        class="reveal mx-auto h-auto w-full max-w-[36rem]"
-      />
     </header>
 
     <Content components={mdx} />

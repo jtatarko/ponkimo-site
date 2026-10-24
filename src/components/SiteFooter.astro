@@ -1,12 +1,14 @@
 ---
+import Arrow from "../assets/svg/arrow.svg";
 import { site } from "../data/site";
 ---
 
 <!--
   Framer revealed this footer from behind the page as you scrolled past the
   end. Same effect here: <main> sits above it (z-10) and the footer is sticky.
+  It fills the viewport under the nav, like the original.
 -->
-<footer class="sticky bottom-0 z-0 overflow-hidden bg-band text-on-band">
+<footer class="sticky bottom-0 z-0 overflow-hidden bg-black text-on-band">
   <video
     class="absolute inset-0 size-full object-cover opacity-60 motion-reduce:hidden"
     src="/media/footer-loop.mp4"
@@ -16,19 +18,24 @@ import { site } from "../data/site";
     playsinline
     preload="none"
     aria-hidden="true"></video>
-  <div class="page relative flex min-h-[min(800px,90dvh)] flex-col justify-center gap-16 py-24">
+  <div
+    class="page relative flex min-h-[calc(100dvh-var(--spacing-nav))] flex-col justify-center py-24 lg:max-w-[calc(63rem+2*var(--spacing-gutter))]"
+  >
     <a
       href={site.links.linkedin}
       target="_blank"
       rel="me noopener"
-      class="group flex max-w-4xl gap-6 font-display text-heading font-medium text-white"
+      class="group mx-auto flex max-w-[50rem] gap-[0.5em] font-display text-heading font-medium text-white"
     >
-      <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+      <Arrow
+        class="mt-[0.45em] h-[0.45em] w-[1.15em] shrink-0 transition-transform duration-300 group-hover:translate-x-2"
+        aria-hidden="true"
+      />
       <span class="underline-offset-8 group-hover:underline">
         Let’s design a cutting-edge product to solve a next big problem.
       </span>
     </a>
-    <div class="flex flex-wrap gap-x-8 gap-y-2 text-label text-on-band/80">
+    <div class="mt-[8.5rem] flex flex-wrap gap-x-8 gap-y-2 border-t border-white/40 pt-6 text-caption text-on-band/70">
       <a class="hover:text-white" href={site.links.linkedin} target="_blank" rel="me noopener">LinkedIn</a>
       <a class="hover:text-white" href={site.links.behance} target="_blank" rel="me noopener">Behance</a>
       <span class="ml-auto">© {new Date().getFullYear()} {site.author}</span>

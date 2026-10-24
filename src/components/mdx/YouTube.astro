@@ -3,21 +3,28 @@
 interface Props {
   id: string;
   title: string;
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
 }
-const { id, title } = Astro.props;
+const { id, title, gap } = Astro.props;
 const thumb = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
 ---
 
-<div class="page reveal my-12 lg:my-20">
+<div
+  class="page reveal my-12 lg:my-20"
+  data-gap={gap !== undefined ? "" : undefined}
+  style={gap !== undefined ? `--gap:${gap}` : undefined}
+>
   <div class="relative mx-auto aspect-video max-w-[72rem] overflow-hidden rounded-lg bg-band" data-youtube={id}>
     <img src={thumb} alt="" loading="lazy" decoding="async" class="absolute inset-0 size-full object-cover" />
     <button
       type="button"
-      class="absolute inset-0 grid place-items-center bg-black/20 transition-colors hover:bg-black/10"
+      class="group absolute inset-0 grid place-items-center bg-black/20 transition-colors hover:bg-black/10"
       aria-label={`Play video: ${title}`}
     >
-      <span class="grid size-20 place-items-center rounded-full bg-brand text-white shadow-lg">
-        <svg viewBox="0 0 24 24" class="ml-1 size-8" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      <!-- Framer's style: dark translucent disc, white play glyph. -->
+      <span class="grid size-[8.5rem] place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm transition-transform group-hover:scale-105">
+        <svg viewBox="0 0 24 24" class="ml-1 size-7" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
       </span>
     </button>
   </div>

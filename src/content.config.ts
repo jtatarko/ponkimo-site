@@ -11,7 +11,8 @@ const work = defineCollection({
       cardTitle: z.string().optional(),
       description: z.string(),
       order: z.number(),
-      hero: image(),
+      /** Illustration beside the title; optional (sponsor-online opens on a video). */
+      hero: image().optional(),
       heroAlt: z.string().default(""),
       /** Homepage card artwork: illustration in front, screenshot behind. */
       cardIllustration: image(),

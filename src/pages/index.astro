@@ -17,16 +17,16 @@ const work = (await getCollection("work", ({ data }) => import.meta.env.DEV || !
   <Intro />
   <LogoStrip />
 
-  <section class="page mt-24 lg:mt-32" aria-label="Case studies">
+  <section class="page mt-10 lg:mt-6" aria-label="Case studies">
     <ul role="list">
       {work.map((entry) => <ProjectCard entry={entry} />)}
     </ul>
   </section>
 
   <section class="page mt-16 lg:mt-24">
-    <p class="reveal text-intro lg:px-8">
-      Projects from further back live on Behance.<br />
-      <a href={site.links.behance} class="link-brand" target="_blank" rel="me noopener">Explore the archive →</a>
+    <p class="reveal text-body lg:px-8">
+      Project from the past long time ago.<br />
+      <a href={site.links.behance} class="text-brand hover:underline" target="_blank" rel="me noopener">Explore</a>
     </p>
   </section>
 </BaseLayout>

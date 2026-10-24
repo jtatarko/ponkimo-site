@@ -1,0 +1,56 @@
+---
+/**
+ * Free-form arrangement of figures, reproducing Framer's absolute layouts.
+ *
+ * Children are <Figure>/<Video>/<Caption> with `at={[x, y, w]}` in Framer
+ * pixels on a 1440px-wide frame, `y` relative to the top of this canvas.
+ * On desktop the canvas keeps the 1440:h proportion and places children by
+ * percentage, so overlaps and offsets survive at any width. Below lg the
+ * children simply stack in source order.
+ */
+interface Props {
+  /** Canvas height in Framer pixels (at 1440px width). */
+  h: number;
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
+}
+const { h, gap } = Astro.props;
+---
+
+<div
+  class="canvas my-10 max-lg:px-gutter lg:my-12"
+  data-gap={gap !== undefined ? "" : undefined}
+  style={`--h:${h}` + (gap !== undefined ? `;--gap:${gap}` : "")}
+>
+  <div class="canvas-frame">
+    <slot />
+  </div>
+</div>
+
+<style is:global>
+  @media (min-width: 64rem) {
+    .canvas-frame {
+      position: relative;
+      margin-inline: auto;
+      max-width: var(--container-page);
+      aspect-ratio: 1440 / var(--h);
+    }
+    .canvas-frame > [data-at] {
+      position: absolute;
+      margin: 0;
+      left: calc(var(--x) / 1440 * 100%);
+      top: calc(var(--y) / var(--h) * 100%);
+      width: calc(var(--w) / 1440 * 100%);
+    }
+  }
+  @media (max-width: 63.999rem) {
+    .canvas-frame {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .canvas-frame > [data-at] {
+      margin: 0;
+    }
+  }
+</style>

@@ -3,7 +3,7 @@ title: "Transforming Transformations with AI"
 client: "Adverity"
 description: "When AI buzz filled every boardroom, Adverity’s stakeholders wanted in. At the same time, we had a backlog full of unsolved user…"
 order: 3
-hero: ../../assets/work/transformation-copilot/VfM36IiQheGefzqnepLQgLU8gIU.png
+hero: ../../assets/work/transformation-copilot/3zIn9nzC8UDrbt71UVfK8ZpOE.png
 heroAlt: "TODO: describe hero illustration"
 cardIllustration: ../../assets/work/transformation-copilot/VfM36IiQheGefzqnepLQgLU8gIU.png
 cardBackdrop: ../../assets/work/transformation-copilot/ZHXbAirzvgJgBvdUeS6Hvj78.png
@@ -31,17 +31,19 @@ At the same time, we had a backlog full of *unsolved user pain*.
 
 </Lead>
 
-<Figure src={img_nLoy1ozN9L} alt="TODO: describe image" size="wide" />
+<Canvas gap={40} h={764}>
+  <Figure src={img_nLoy1ozN9L} alt="TODO: describe image" at={[72, 0, 1296, 764]} />
+</Canvas>
 
-<Section>
+<Section gap={40} divider>
 
 The stakes were high. Tasked with bringing the first AI solution into a complex ETL platform and coming off a just-canceled project. My team and me knew this was our chance to shine.
 
-*What pain do our users feel most?*
-
 </Section>
 
-<Section title="Opportunity" divider>
+<Section gap={120} title="Opportunity">
+
+*What pain do our users feel most?*
 
 *Where do they lose the most time?*
 
@@ -49,27 +51,39 @@ The stakes were high. Tasked with bringing the first AI solution into a complex 
 
 Our discovery started as *collaboration with the UX research team*, identifying opportunities from our repository using [Condens app](https://condens.io/) + reaching out to support team to get recurring topics in tickets.
 
-The collected data provided us with a list of themes we prioritized. Our formula: *Frequency of a pain point × Number of tier A customers (highest ARR*) mentioning the issue × KANO model weight ÷ Feasibility score (evaluated by developers) =* Opportunity Score
+The collected data provided us with a list of themes we prioritized. Our formula: *Frequency of a pain point × Number of tier A customers (highest ARR\*) mentioning the issue × KANO model weight ÷ Feasibility score (evaluated by developers) =* Opportunity Score
 
-*Annual Recurring Revenue
+<p class="text-caption text-muted">Annual Recurring Revenue</p>
+
+</Section>
+
+<Section gap={120} divider>
 
 Using the score, we ended with a shortlist of opportunities for the data science team to explore through experiments.\
 Following Adverity's *Discoverer process*: a blend of Shape Up and Design Sprint, we focused on learning fast and so many experiments quickly reached dead ends due to insufficient data or high technical costs.
 
-<Figure src={img_EjZNgi3tlg} alt="TODO: describe image" />
+</Section>
+
+<Canvas gap={80} h={283}>
+  <Figure src={img_EjZNgi3tlg} alt="TODO: describe image" at={[692, 0, 668, 283]} />
+</Canvas>
+
+<Section gap={40} divider>
 
 Eventually one clear winner emerged:\
 *Data Transformations*, a critical part of the ETL (Extract, Transform, Load) process, used by a broad spectrum of users, from Python-savvy experts to absolute newcomers.\
 Data showed that users frequently relied on extensive documentation or Adverity support for assistance.\
 This pain point wasn’t just common: *it was strategic*. Reducing support tickets was a top-level OKR tied directly to improving ROI.
 
-Themes from research repository
+<p class="text-caption text-muted">Themes from research repository</p>
 
 </Section>
 
-<Figure src={img_tAjq9hYv4R} alt="TODO: describe image" size="right" />
+<Canvas gap={0} h={452}>
+  <Figure src={img_tAjq9hYv4R} alt="TODO: describe image" at={[576, 0, 864, 452]} />
+</Canvas>
 
-<Section title="Plan" divider>
+<Section gap={159} title="Plan" divider>
 
 Our plan seemed clear and feasible. We took an *LLM* (via OpenAI’s API), *fine-tuned it* using data from documentation and support tickets, and developed a *conversational assistant*.
 
@@ -80,11 +94,12 @@ Like other internal tech debts, it had never made it to the top of the roadmap. 
 
 </Section>
 
-<Video src="/media/transformation-copilot/JZbaIyOPbFppmyPujdB2pvXOkA.mp4" label="TODO: describe clip" ratio="1008 / 562" size="right" />
+<Canvas gap={40} h={575}>
+  <Video src="/media/transformation-copilot/JZbaIyOPbFppmyPujdB2pvXOkA.mp4" label="TODO: describe clip" ratio="1008 / 562" at={[432, 0, 1008, 562]} />
+  <Figure src={img_ivYZJGKWFn} alt="TODO: describe image" at={[812, 414, 186, 161]} />
+</Canvas>
 
-<Figure src={img_ivYZJGKWFn} alt="TODO: describe image" size="right" />
-
-<Section title="Pivot" divider>
+<Section gap={28} title="Pivot" divider>
 
 We hit pause and got back to the drawing board. If documentation couldn’t be trusted, we needed a new foundation. This time, we partnered *directly with internal data transformation experts.* Using a simple feedback UI, they reviewed assistant responses, flagged inaccuracies, and provided corrections. Every manual label made the model smarter.\
 We also rebalanced the training data, giving *more weight to real, resolved support tickets*: ground truth over idealized help articles.
@@ -94,13 +109,15 @@ Better yet, our revised strategy created a second benefit: expert-reviewed respo
 
 *One system. Two wins.*
 
-Example of classifying an answer
+<p class="text-caption text-muted">Example of classifying an answer</p>
 
 </Section>
 
-<Figure src={img_bEtWf6IliZ} alt="TODO: describe image" size="right" />
+<Canvas gap={0} h={505}>
+  <Figure src={img_bEtWf6IliZ} alt="TODO: describe image" at={[723, 0, 714, 505]} />
+</Canvas>
 
-<Section title="It worked!" divider>
+<Section gap={152} title="It worked!" divider>
 
 We had traction. While the assistant wasn’t flawless, the number of cases requiring expert intervention dropped noticeably. It handled more of the repetitive, time-consuming queries *freeing up our support team* to focus on complex edge cases and faster response times.
 
@@ -110,43 +127,36 @@ Each resolved interaction became part of a *continuous improvement loop.* Expert
 
 </Section>
 
-<Video src="/media/transformation-copilot/SMrg5QyvcJU0OJkFl3YTO4ByX8.mp4" label="TODO: describe clip" ratio="1114 / 630" size="wide" />
+<Canvas gap={160} h={630}>
+  <Video src="/media/transformation-copilot/SMrg5QyvcJU0OJkFl3YTO4ByX8.mp4" label="TODO: describe clip" ratio="1114 / 630" at={[0, 0, 1114, 630]} />
+  <Figure src={img_jYUb3mNX23} alt="TODO: describe image" at={[1138, 29, 302, 601]} />
+</Canvas>
 
-<Figure src={img_jYUb3mNX23} alt="TODO: describe image" size="right" />
+<Testimonial gap={144} name="Roman Gavuliak" role="Director of Data Science at Adverity" avatar={img_1dutqxMobE}>
 
-<Testimonial name="Roman Gavuliak" role="Director of Data Science at Adverity">
-
-I have worked with Jakub on several ***innovative projects.*** He's always eager to pioneer and take inspiration from the right places to come up with a working design. His level-headed and constructive nature enabled him to adjust to the pace of the iterative process of software development, and ***brought a fruitful collaboration***.
+I have worked with Jakub on several *innovative projects.* He's always eager to pioneer and take inspiration from the right places to come up with a working design. His level-headed and constructive nature enabled him to adjust to the pace of the iterative process of software development, and *brought a fruitful collaboration*.
 
 </Testimonial>
 
-<PullQuote>
+<Canvas gap={119} h={433}>
+  <Figure src={img_qogcQG8dp2} alt="TODO: describe image" at={[162, 0, 701, 433]} />
+  <Figure src={img_sY0TOL7AWy} alt="TODO: describe image" at={[864, 28, 417, 378]} />
+</Canvas>
 
-I have worked with Jakub on several ***innovative projects.*** He's always eager to pioneer and take inspiration from the right places to come up with a working design. His level-headed and constructive nature enabled him to adjust to the pace of the iterative process of software development, and ***brought a fruitful collaboration***.
+<Section gap={80} divider>
 
-</PullQuote>
-
-<Figure src={img_1dutqxMobE} alt="TODO: describe image" size="wide" />
-
-<FigureGrid>
-  <Figure src={img_qogcQG8dp2} alt="TODO: describe image" />
-  <Figure src={img_sY0TOL7AWy} alt="TODO: describe image" width={417} />
-</FigureGrid>
-
-<Section>
-
-First data showing adoption (source: Zendesk, Mixpanel)
+<p class="text-caption text-muted">First data showing adoption (source: Zendesk, Mixpanel)</p>
 
 </Section>
 
-<Section title="Designing for AI" divider>
+<Section gap={120} title="Designing for AI" divider>
 
 Designing a conversational assistant was about crafting a personality, building trust, and setting expectations in a space full of unknowns.
 
 I faced new challenges:
 
-- How do we reflect the brand’s tone of voice in the assistant’s responses?\
-- How do we gracefully handle irrelevant questions or edge cases?\
+- How do we reflect the brand’s tone of voice in the assistant’s responses?
+- How do we gracefully handle irrelevant questions or edge cases?
 - How do we signal limitations without eroding trust?
 
 To address this, we teamed up with data scientists again this time to define a set of known data transformation intents. These acted as anchors for response quality and let us craft replies that were not only context-aware but also human in tone.
@@ -155,18 +165,18 @@ We designed fallback interactions that balanced clarity with charm. Even in erro
 
 </Section>
 
-<FigureGrid>
-  <Figure src={img_8pyW8Hm4wi} alt="TODO: describe image" />
-  <Figure src={img_YD1VWdqYwA} alt="TODO: describe image" />
-</FigureGrid>
+<Canvas gap={136} h={509}>
+  <Figure src={img_8pyW8Hm4wi} alt="TODO: describe image" at={[200, 0, 536, 509]} />
+  <Figure src={img_YD1VWdqYwA} alt="TODO: describe image" at={[756, 29, 504, 452]} />
+</Canvas>
 
-<Section>
+<Section gap={136} divider>
 
 It was here that conversation design became a *part of our design system*. And it was the UX community through shared resources like [*shapeof.ai*](https://www.shapeof.ai/) that guided me through unfamiliar territory. Thanks.
 
 </Section>
 
-<PullQuote>
+<PullQuote gap={136}>
 
 User: *"Do you like strawberry pasta?"*
 
@@ -174,25 +184,29 @@ AI Assistant: *"That’s a creative twist! Data transformations require a dash o
 
 </PullQuote>
 
-<Figure src={img_0Hsbt6EZye} alt="TODO: describe image" size="wide" />
+<Canvas gap={56} h={452}>
+  <Figure src={img_0Hsbt6EZye} alt="TODO: describe image" at={[396, 0, 648, 452]} />
+</Canvas>
 
-<Section title="Next Level" divider>
+<Section gap={104} title="Next Level" divider>
 
 Once the assistant launched, feedback came fast and with it, a clear direction for what came next. Users wanted more than explanations. *They wanted execution.*
 
 We envisioned a future where the assistant could offer *personalized suggestions* and apply data transformations directly, moving from advisor to action-taker.\
 This step came with new challenges:
 
-- *Trust:* users needed full visibility before allowing any automated action. The assistant would have to explain its intended steps clearly, enabling users to confirm or reject them.\
+- *Trust:* users needed full visibility before allowing any automated action. The assistant would have to explain its intended steps clearly, enabling users to confirm or reject them.
 - *Security* was non-negotiable. Because the assistant handled sensitive data, we had to guarantee strict isolation between customer environments: no overlap, no leakage.
 
 The project moved again into the pitching phase with the vision of an assistant that not only understands your data problems, but *solves them: securely, transparently, and in real time*.
 
 </Section>
 
-<Figure src={img_oplwCCC9zG} alt="TODO: describe image" size="wide" />
+<Canvas gap={120} h={668}>
+  <Figure src={img_oplwCCC9zG} alt="TODO: describe image" at={[72, 0, 1296, 668]} pos="50% 0%" />
+</Canvas>
 
-<Section>
+<Section gap={322} divider>
 
 ***"Copilot makes information about data transformations easily accessible."***
 
