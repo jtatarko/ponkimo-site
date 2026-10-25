@@ -17,13 +17,19 @@ interface Props {
   ratio?: string;
   /** Max rendered width in px, for small inline images. */
   width?: number;
+  /**
+   * "art": line art on white (Framer's multiply-blended images). In dark mode it
+   * is inverted and screened into the page at reduced opacity.
+   * "shot" (default): screenshots, dimmed slightly in dark mode.
+   */
+  tone?: "art" | "shot";
   /** Crop anchor (CSS object-position) when the box crops the image. */
   pos?: string;
   /** Extra space above, in px on desktop (aligns an aside with its paragraph). */
   offset?: number;
   class?: string;
 }
-const { src, alt, caption, at, ratio, width, pos, offset, class: className } = Astro.props;
+const { src, alt, caption, at, ratio, width, pos, tone = "shot", offset, class: className } = Astro.props;
 const [x, y, w, h] = at ?? [];
 const box = at && h ? `${w} / ${h}` : ratio;
 const sizes = at
@@ -45,6 +51,12 @@ const sizes = at
     sizes={sizes}
     widths={[480, 800, 1200, 1600, 2400].filter((v) => v <= src.width)}
     style={[box && `aspect-ratio:${box}`, width && `max-width:${width}px`, pos && `object-position:${pos}`].filter(Boolean).join(";") || undefined}
-    class:list={["w-full", box ? "object-cover" : "h-auto"]}
+    class:list={[
+      "w-full",
+      box ? "object-cover" : "h-auto",
+      tone === "art"
+        ? "dark:opacity-65 dark:mix-blend-screen dark:invert"
+        : "dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100",
+    ]}
   />
 </figure>

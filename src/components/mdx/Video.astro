@@ -22,7 +22,7 @@ const [x, y, w] = at ?? [];
 >
   {caption && <figcaption class="mb-3 text-caption text-muted">{caption}</figcaption>}
   <video
-    class="h-auto w-full rounded-lg bg-line/30 object-cover"
+    class="h-auto w-full rounded-lg bg-line/30 object-cover dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100"
     style={`aspect-ratio:${ratio}`}
     src={src}
     poster={poster}

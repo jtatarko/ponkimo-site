@@ -18,7 +18,7 @@ const { name, role, avatar, gap } = Astro.props;
   style={gap !== undefined ? `--gap:${gap}` : undefined}
 >
   <div class="mx-auto max-w-[45rem]">
-    <span aria-hidden="true" class="block font-sans text-[6.75rem] leading-[0.6] text-brand">“</span>
+    <span aria-hidden="true" class="block font-sans text-[6.75rem] leading-[0.6] text-muted">“</span>
     <blockquote class="mt-6 text-lead [&>*+*]:mt-[1em]">
       <slot />
     </blockquote>

@@ -19,12 +19,15 @@ const logos = [
 ];
 ---
 
-<section class="page mt-20 lg:mt-24" aria-labelledby="worked-with">
-  <h2 id="worked-with" class="font-sans text-label font-normal text-muted lg:pl-6">Worked with</h2>
+<section
+  class="page relative isolate mt-20 lg:mt-24 dark:before:absolute dark:before:inset-x-[calc(var(--spacing-gutter)-1rem)] dark:before:-top-12 dark:before:-bottom-8 dark:before:-z-10 dark:before:bg-logo-slab dark:before:content-['']"
+  aria-labelledby="worked-with"
+>
   <!--
-    Framer showed these on a grey slab in dark mode. Instead they render as
-    monochrome marks in dark mode so they sit on the page background.
+    The marks are full-colour artwork (Land Rover, Škoda, ...) and don't survive
+    recolouring, so in dark mode they sit on a light slab, as in the original.
   -->
+  <h2 id="worked-with" class="font-sans text-label font-normal text-muted lg:pl-6 dark:text-[#545454]">Worked with</h2>
   <ul
     class="mt-8 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:flex lg:justify-between lg:px-6"
     role="list"
@@ -37,7 +40,7 @@ const logos = [
             alt={alt}
             height={h}
             style={`height:${h}px`}
-            class="w-auto max-w-[11rem] object-contain max-lg:scale-90 dark:opacity-70 dark:brightness-0 dark:invert"
+            class="w-auto max-w-[11rem] object-contain max-lg:scale-90"
           />
         </li>
       ))

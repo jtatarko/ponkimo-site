@@ -85,10 +85,16 @@ function walk() {
     if (!vis(im)) continue;
     const set = (im.getAttribute("srcset") || "").split(",").map((x) => x.trim().split(" ")[0]).filter(Boolean);
     const s = getComputedStyle(im);
+    // Framer sets mix-blend-mode: multiply on the wrapper of line art and
+    // diagrams (white drops out on any background); screenshots have none.
+    let multiply = false;
+    for (let p = im.parentElement; p && p !== document.body; p = p.parentElement) {
+      if (getComputedStyle(p).mixBlendMode === "multiply") multiply = true;
+    }
     blocks.push({
       kind: "img", src: (set.pop() || im.currentSrc || im.src).split("?")[0], alt: im.alt || "",
       fit: s.objectFit, position: s.objectPosition, natural: [im.naturalWidth, im.naturalHeight],
-      dark: bandOf(im), ...box(im),
+      multiply, dark: bandOf(im), ...box(im),
     });
   }
   for (const v of document.querySelectorAll("video")) {

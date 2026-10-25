@@ -251,7 +251,9 @@ async function importStudy(study) {
     const small = !at && !slot && b.w < 420 ? ` width={${b.w}}` : "";
     // Framer's crop anchor, when it isn't the centre.
     const pos = b.fit === "cover" && b.position && b.position !== "50% 50%" ? ` pos="${b.position}"` : "";
-    return `<Figure src={${imgRef(b)}} alt=${attr(cap ?? "TODO: describe image")}${atAttr}${capAttr}${small}${pos}${slotAttr} />`;
+    // Line art (Framer wraps it in mix-blend-mode: multiply) is treated differently from screenshots in dark mode.
+    const tone = b.multiply ? ` tone="art"` : "";
+    return `<Figure src={${imgRef(b)}} alt=${attr(cap ?? "TODO: describe image")}${atAttr}${capAttr}${small}${pos}${tone}${slotAttr} />`;
   };
   const isMedia = (b) => b.kind === "img" || b.kind === "video";
   const overlapsY = (a, b) => a.y < b.y + b.h && b.y < a.y + a.h;
@@ -485,6 +487,9 @@ async function importStudy(study) {
   let prevBottom = leadBlocks.length ? Math.max(...leadBlocks.map((o) => o.y + o.h)) : titleBlock.y + titleBlock.h;
   const blocksMdx = body.map(({ code, top, bottom }) => {
     const gap = Math.max(0, Math.round(top - prevBottom));
+    if (process.env.DEBUG_BLOCKS === study.slug) {
+      console.log(JSON.stringify({ top: Math.round(top), bottom: Math.round(bottom), h: Math.round(bottom - top), gap, code: code.split("\n")[0].slice(0, 60) }));
+    }
     prevBottom = Math.max(prevBottom, bottom);
     return code.replace(/^<(\w+)/, `<$1 gap={${gap}}`);
   });
