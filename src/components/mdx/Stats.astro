@@ -1,0 +1,22 @@
+---
+/** Row of headline figures, each with a short explanation: <Stat figure="-58%">…</Stat>. */
+interface Props {
+  divider?: boolean;
+  /** Framer px of space above this block at 1440 wide (desktop only). */
+  gap?: number;
+}
+const { divider = false, gap } = Astro.props;
+---
+
+<!-- A <section> so the shared chapter-gap rules in global.css apply. -->
+<section
+  class:list={[
+    "page reveal my-12 grid gap-10 md:grid-cols-3 lg:my-20",
+    divider && "relative pt-12 before:absolute before:inset-x-gutter before:top-0 before:h-px before:bg-line",
+  ]}
+  data-gap={gap !== undefined ? "" : undefined}
+  data-divider={divider ? "" : undefined}
+  style={gap !== undefined ? `--gap:${gap}` : undefined}
+>
+  <slot />
+</section>

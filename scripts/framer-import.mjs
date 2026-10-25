@@ -196,15 +196,36 @@ async function importStudy(study) {
     }
   }
 
+  // Rows of headline figures ("-58%", "2 → 5") with a caption under each.
+  // Several 48px Montserrat lines at the same height are stats, not chapters.
+  const statRowFor = new Map(); // first figure of the row -> { figs, descs }
+  const bigFigs = blocks.filter((b) => b.kind === "text" && b.ff.startsWith("Montserrat") && b.fs >= 40 && b.fs < 60 && !b.dark);
+  for (const f of bigFigs) {
+    const row = bigFigs.filter((o) => Math.abs(o.y - f.y) < 6).sort((a, b) => a.x - b.x);
+    if (row.length < 2 || row[0] !== f) continue;
+    const descs = row.map((o) =>
+      blocks.find((t) => t.kind === "text" && t.fs < 28 && t.fs > 15 && t.x >= o.x - 60 && t.x <= o.x + 10 && t.y > o.y && t.y - o.y < 150),
+    );
+    if (descs.some((d) => !d)) continue;
+    statRowFor.set(f, { figs: row, descs });
+    [...row.slice(1), ...descs].forEach((o) => used.add(o));
+  }
+
   // Section headings belong to the right-column paragraph just above them.
   const rightText = (b) => b.kind === "text" && b.x >= 640 && b.fs < 28 && b.fs > 15;
   const headingFor = new Map();
-  for (const h of blocks.filter((b) => b.kind === "text" && b.ff.startsWith("Montserrat") && b.fs >= 40 && b.fs < 60)) {
+  const statFigs = new Set([...statRowFor.values()].flatMap((r) => r.figs));
+  for (const h of blocks.filter((b) => b.kind === "text" && b.ff.startsWith("Montserrat") && b.fs >= 40 && b.fs < 60 && !statFigs.has(b))) {
     const anchor = blocks.filter((b) => rightText(b) && b.y <= h.y + 10 && h.y - b.y < 200 && !headingFor.has(b)).pop();
     const heading = { text: h.text.replace(/\n/g, " "), block: h };
-    if (anchor) headingFor.set(anchor, heading);
-    else headingFor.set(h, heading); // stand-alone heading
-    used.add(h);
+    if (anchor) {
+      headingFor.set(anchor, heading);
+      used.add(h);
+    } else {
+      // Stand-alone heading (nothing beside it): stays in the flow and opens
+      // its own heading-only section, e.g. "Solved challenges".
+      headingFor.set(h, heading);
+    }
   }
 
   // 3. Emit ----------------------------------------------------------------
@@ -285,16 +306,28 @@ async function importStudy(study) {
   };
   let sectionCount = 0;
   let pendingDivider = false;
+  // A heading-only <Section> already carries the chapter hairline.
+  const afterHeading = () => /^<Section[^>]*>\s*<\/Section>$/.test(body.at(-1)?.code ?? "");
 
   const rest = blocks.filter((b) => !used.has(b));
   for (let i = 0; i < rest.length; i++) {
     const b = rest[i];
+    if (statRowFor.has(b)) {
+      const { figs, descs } = statRowFor.get(b);
+      closeSection();
+      const items = figs.map((f, i) => `  <Stat figure=${attr(f.text)}>\n\n${quoteText(descs[i].text)}\n\n  </Stat>`);
+      emit(`<Stats${pendingDivider && !afterHeading() ? " divider" : ""}>\n${items.join("\n")}\n</Stats>`, [...figs, ...descs]);
+      pendingDivider = false;
+      continue;
+    }
     if (used.has(b)) continue;
 
     // Framer's hairlines mark chapter breaks.
     if (b.kind === "hr") {
+      // A rule right after a heading-only section is that heading's own line.
+      const headingOnly = section?.title && !section.lines.length && !section.asides.length;
       closeSection();
-      pendingDivider = true;
+      if (!headingOnly) pendingDivider = true;
       continue;
     }
 
@@ -332,10 +365,11 @@ async function importStudy(study) {
         const items = row.map((o) => {
           const sub = rest.find((s) => s.kind === "text" && s.fs < 28 && Math.abs(s.x - o.x) < 30 && s.y > o.y && s.y - o.y < 250);
           if (sub) used.add(sub), subs.push(sub);
-          return `  { title: ${yaml(plain(o.text))}${sub ? `, text: ${yaml(plain(sub.text))}` : ""} }`;
+          return `  <Stat figure=${attr(plain(o.text))} size="md">\n\n${sub ? quoteText(sub.text) : ""}\n\n  </Stat>`;
         });
         row.forEach((o) => used.add(o));
-        emit(`<Highlights\n  items={[\n${items.join(",\n")}\n  ]}\n/>`, [...row, ...subs]);
+        emit(`<Stats${pendingDivider && !afterHeading() ? " divider" : ""}>\n${items.join("\n")}\n</Stats>`, [...row, ...subs]);
+        pendingDivider = false;
         i += row.length - 1;
         continue;
       }
@@ -344,6 +378,22 @@ async function importStudy(study) {
       continue;
     }
     if (used.has(b)) continue;
+
+    // Three or more equal-width text columns side by side (e.g. customer
+    // quotes) become a <Stats> row without figures.
+    if (b.kind === "text" && b.w <= 450 && b.fs === 20) {
+      const cols = rest.filter(
+        (o) => o.kind === "text" && !used.has(o) && o.fs === b.fs && o.w <= 450 && Math.abs(o.y - b.y) < 6 && o.x >= b.x,
+      );
+      if (cols.length >= 3 && cols[0] === b) {
+        closeSection();
+        const items = cols.map((c) => `  <Stat>\n\n${quoteText(c.text)}\n\n  </Stat>`);
+        cols.forEach((o) => used.add(o));
+        emit(`<Stats${pendingDivider && !afterHeading() ? " divider" : ""}>\n${items.join("\n")}\n</Stats>`, cols);
+        pendingDivider = false;
+        continue;
+      }
+    }
 
     // A small label right above an image belongs to that image's canvas.
     if (isLabel(b) && rest.some((o) => isMedia(o) && !used.has(o) && o.y > b.y && o.y - b.y < 150)) continue;

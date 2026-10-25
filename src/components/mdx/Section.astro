@@ -14,6 +14,8 @@ interface Props {
 const { title, divider = false, gap } = Astro.props;
 const id = title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const hasAside = Astro.slots.has("aside");
+// A section with only a heading (e.g. "Solved challenges") spans the full width.
+const headingOnly = !!title && !hasAside && !Astro.slots.has("default");
 ---
 
 <section
@@ -31,7 +33,7 @@ const hasAside = Astro.slots.has("aside");
 >
   {
     (title || hasAside) && (
-      <div class="flex flex-col gap-10 lg:pr-12">
+      <div class:list={["flex flex-col gap-10 lg:pr-12", headingOnly && "lg:col-span-2"]}>
         {title && <h2 class="reveal text-heading">{title}</h2>}
         {hasAside && (
           <div class="max-w-[34rem] [&>figure]:my-0 [&>figure+figure]:mt-10">
@@ -41,7 +43,11 @@ const hasAside = Astro.slots.has("aside");
       </div>
     )
   }
-  <div class="prose-cs max-w-[35rem] lg:col-start-2">
-    <slot />
-  </div>
+  {
+    !headingOnly && (
+      <div class="prose-cs max-w-[35rem] lg:col-start-2">
+        <slot />
+      </div>
+    )
+  }
 </section>

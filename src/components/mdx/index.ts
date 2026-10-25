@@ -9,4 +9,5 @@ export { default as YouTube } from "./YouTube.astro";
 export { default as Lead } from "./Lead.astro";
 export { default as Testimonial } from "./Testimonial.astro";
 export { default as PullQuote } from "./PullQuote.astro";
-export { default as Highlights } from "./Highlights.astro";
+export { default as Stats } from "./Stats.astro";
+export { default as Stat } from "./Stat.astro";

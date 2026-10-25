@@ -1,0 +1,33 @@
+---
+import Mark from "../../assets/svg/mark.svg";
+
+interface Props {
+  /** Headline figure or word; omit for a plain text column (e.g. a quote). */
+  figure?: string;
+  /**
+   * "lg" (default): short figure in Montserrat, mark inline before it.
+   * "md": sentence-length headline in the body font, mark stacked above it.
+   */
+  size?: "md" | "lg";
+}
+const { figure, size = "lg" } = Astro.props;
+---
+
+<div class="max-w-[26rem]">
+  {
+    size === "md" ? (
+      <>
+        <Mark class="h-[26px] w-7" aria-hidden="true" />
+        {figure && <p class="mt-3 text-lead text-content">{figure}</p>}
+      </>
+    ) : (
+      <p class="flex items-center gap-3 font-display text-heading font-medium text-content">
+        <Mark class="h-[34px] w-9 shrink-0" aria-hidden="true" />
+        {figure}
+      </p>
+    )
+  }
+  <div class="prose-cs mt-4 text-body">
+    <slot />
+  </div>
+</div>
