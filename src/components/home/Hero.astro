@@ -28,12 +28,13 @@ import { site } from "../../data/site";
     />
   </figure>
 
-  <ul class="mt-6 flex flex-wrap justify-center gap-x-3 gap-y-1 text-body text-muted" role="list">
+  <!-- Bullets trail each skill so a wrapped line never starts with one. -->
+  <ul class="mt-6 flex flex-wrap justify-start gap-x-3 gap-y-1 text-body text-muted lg:justify-center" role="list">
     {
       site.skills.map((skill, i) => (
         <li class="flex items-center gap-3">
-          {i > 0 && <span aria-hidden="true">•</span>}
           {skill}
+          {i < site.skills.length - 1 && <span aria-hidden="true">•</span>}
         </li>
       ))
     }
