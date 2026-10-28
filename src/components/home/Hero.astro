@@ -20,7 +20,7 @@ import { site } from "../../data/site";
   </div>
 
   <!-- Research -> Concept -> Design scribble: ambiguity resolving into clarity. -->
-  <figure class="reveal mt-16 lg:mt-20 lg:px-16">
+  <figure class="reveal mt-16 lg:mt-20 lg:px-16" data-parallax="-0.08" data-parallax-from="top" data-parallax-clamp="1200">
     <Image
       src={process}
       alt="A tangled line that gradually straightens out, moving from Research (ambiguity, patterns, insights) through Concept to Design (clarity, focus)."
@@ -30,7 +30,7 @@ import { site } from "../../data/site";
   </figure>
 
   <!-- Bullets trail each skill so a wrapped line never starts with one. -->
-  <ul class="mt-6 flex flex-wrap justify-start gap-x-3 gap-y-1 text-body text-muted lg:justify-center" role="list">
+  <ul data-parallax="-0.04" data-parallax-from="top" data-parallax-clamp="750" class="mt-6 flex flex-wrap justify-start gap-x-3 gap-y-1 text-body text-muted lg:justify-center" role="list">
     {
       site.skills.map((skill, i) => (
         <li class="flex items-center gap-3">

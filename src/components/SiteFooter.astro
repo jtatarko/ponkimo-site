@@ -6,7 +6,8 @@ import { site } from "../data/site";
 <!--
   Framer revealed this footer from behind the page as you scrolled past the
   end. Same effect here: <main> sits above it (z-10) and the footer is sticky.
-  It fills the viewport under the nav, like the original.
+  It fills the viewport under the nav, like the original. The content uses the
+  same page width as the case-study cards, so the rule lines up with their dividers.
 -->
 <footer class="sticky bottom-0 z-0 overflow-hidden bg-black text-on-band">
   <video
@@ -19,7 +20,7 @@ import { site } from "../data/site";
     preload="none"
     aria-hidden="true"></video>
   <div
-    class="page relative flex min-h-[calc(100dvh-var(--spacing-nav))] flex-col justify-center py-24 lg:max-w-[calc(63rem+2*var(--spacing-gutter))]"
+    class="page relative flex min-h-[calc(100dvh-var(--spacing-nav))] flex-col justify-center py-24"
   >
     <a
       href={site.links.linkedin}

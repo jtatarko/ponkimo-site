@@ -8,14 +8,17 @@ interface Props {
   caption?: string;
   /** Placement inside a <Canvas>, in Framer pixels: [x, y, w, h?]. */
   at?: [number, number, number, number?];
+  /** Scroll parallax speed (fraction of scroll; negative moves faster). Desktop only. */
+  parallax?: number;
   /** Intrinsic aspect ratio, avoids layout shift before metadata loads. */
   ratio?: string;
 }
-const { src, label, poster, caption, at, ratio = "16 / 9" } = Astro.props;
+const { src, label, poster, caption, at, parallax, ratio = "16 / 9" } = Astro.props;
 const [x, y, w] = at ?? [];
 ---
 
 <figure
+  data-parallax={parallax}
   data-at={at ? "" : undefined}
   style={at ? `--x:${x};--y:${y};--w:${w}` : undefined}
   class:list={["reveal", !at && "my-10 lg:my-12"]}

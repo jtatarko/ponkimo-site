@@ -67,6 +67,13 @@ for (const p of paths) {
     rows.push({ id, range: Math.round(range), slope: Math.round(slope * 100) / 100, span: [pts[0][0], pts.at(-1)[0]], what: info[id] });
   }
   rows.sort((a, b) => b.range - a.range);
+  // Machine-readable speeds for the importer: images and videos only.
+  const meta = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll("[data-px]")].filter((e) => ["IMG", "VIDEO"].includes(e.tagName)).map((el) => {
+    const r = el.getBoundingClientRect();
+    return [el.dataset.px, { file: (el.currentSrc || el.src).split("/").pop().split("?")[0], x: Math.round(r.x), y: Math.round(r.y + scrollY), w: Math.round(r.width), h: Math.round(r.height) }];
+  })));
+  const speeds = rows.filter((r) => meta[r.id] && Math.abs(r.slope) >= 0.02 && Math.abs(r.slope) < 0.5 && r.range >= 10).map((r) => ({ ...meta[r.id], slope: r.slope }));
+  if (p) await (await import("node:fs/promises")).writeFile(new URL(`./framer-extract/parallax-${p}.json`, import.meta.url), JSON.stringify(speeds, null, 1));
   console.log(`== /${p}  (${ids.size} tracked, ${rows.length} moving)`);
   for (const r of rows.slice(0, 12)) console.log(`  slope ${String(r.slope).padStart(5)}  drift ${String(r.range).padStart(4)}px  scroll ${r.span[0]}–${r.span[1]}  ${r.what}`);
   await page.close();

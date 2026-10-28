@@ -3,7 +3,8 @@
 ---
 
 <div class="page grid pt-10 pb-8 lg:grid-cols-2 lg:pt-24 lg:pb-0">
-  <div class="text-lead lg:col-start-2 [&>*+*]:mt-[1em]">
+  <!-- Framer moves the lead ~8% faster than the page over the first 700px. -->
+  <div class="text-lead lg:col-start-2 [&>*+*]:mt-[1em]" data-parallax="-0.08" data-parallax-from="top" data-parallax-clamp="700">
     <slot />
   </div>
 </div>

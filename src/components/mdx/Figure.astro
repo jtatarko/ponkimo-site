@@ -25,11 +25,13 @@ interface Props {
   tone?: "art" | "shot";
   /** Crop anchor (CSS object-position) when the box crops the image. */
   pos?: string;
+  /** Scroll parallax speed (fraction of scroll; negative moves faster). Desktop only. */
+  parallax?: number;
   /** Extra space above, in px on desktop (aligns an aside with its paragraph). */
   offset?: number;
   class?: string;
 }
-const { src, alt, caption, at, ratio, width, pos, tone = "shot", offset, class: className } = Astro.props;
+const { src, alt, caption, at, ratio, width, pos, tone = "shot", parallax, offset, class: className } = Astro.props;
 const [x, y, w, h] = at ?? [];
 const box = at && h ? `${w} / ${h}` : ratio;
 const sizes = at
@@ -40,6 +42,7 @@ const sizes = at
 ---
 
 <figure
+  data-parallax={parallax}
   data-at={at ? "" : undefined}
   style={at ? `--x:${x};--y:${y};--w:${w}` : offset ? `--offset:${offset}px` : undefined}
   class:list={["reveal", !at && "my-10 first:mt-0 lg:my-12", offset && "lg:!mt-[var(--offset)]", className]}

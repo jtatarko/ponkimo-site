@@ -56,6 +56,51 @@ const og = ogImage
     <SiteFooter />
 
     <script>
+      // Subtle scroll parallax (desktop, no reduced motion), as on the Framer site.
+      // data-parallax="<speed>": extra drift as a fraction of scroll; negative moves
+      // faster than the page. Default is centred on the viewport; data-parallax-from="top"
+      // measures from page top, capped by data-parallax-clamp (px).
+      // Uses the `translate` property so it never fights the .reveal transform.
+      const mq = matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)");
+      const items = [...document.querySelectorAll<HTMLElement>("[data-parallax]")].map((el) => ({
+        el,
+        speed: parseFloat(el.dataset.parallax ?? "0"),
+        fromTop: el.dataset.parallaxFrom === "top",
+        clamp: parseFloat(el.dataset.parallaxClamp ?? "Infinity"),
+        shift: 0,
+      }));
+      let ticking = false;
+      function paint() {
+        ticking = false;
+        const vh = innerHeight;
+        for (const it of items) {
+          let shift = 0;
+          if (mq.matches && it.speed) {
+            if (it.fromTop) {
+              shift = it.speed * Math.min(scrollY, it.clamp);
+            } else {
+              const r = it.el.getBoundingClientRect();
+              const limit = vh / 2 + r.height / 2;
+              const p = Math.max(-limit, Math.min(limit, r.top - it.shift + r.height / 2 - vh / 2));
+              shift = -it.speed * p;
+            }
+          }
+          if (Math.abs(shift - it.shift) > 0.1) {
+            it.shift = shift;
+            it.el.style.translate = shift ? `0 ${shift.toFixed(1)}px` : "";
+          }
+        }
+      }
+      const request = () => !ticking && ((ticking = true), requestAnimationFrame(paint));
+      if (items.length) {
+        addEventListener("scroll", request, { passive: true });
+        addEventListener("resize", request);
+        mq.addEventListener("change", request);
+        paint();
+      }
+    </script>
+
+    <script>
       // Fade elements in as they enter the viewport (CSS handles reduced motion).
       const io = new IntersectionObserver(
         (entries) => {

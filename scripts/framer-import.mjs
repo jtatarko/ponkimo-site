@@ -119,6 +119,14 @@ async function importStudy(study) {
   const data = typeof raw === "string" ? JSON.parse(raw) : raw;
   console.log(`\n${study.slug}`);
 
+  // Scroll-parallax speeds measured on the live page (scripts/detect-parallax.mjs).
+  const parPath = join(ROOT, `scripts/framer-extract/parallax-${study.slug}.json`);
+  const parData = (await exists(parPath)) ? JSON.parse(await readFile(parPath, "utf8")) : [];
+  const speedFor = (b) =>
+    parData
+      .filter((p) => p.file === fileOf(b.src))
+      .sort((p, q) => Math.abs(p.y - b.y) - Math.abs(q.y - b.y))[0]?.slope;
+
   // Framer "Fit" images (object-fit: contain) only fill part of their box.
   // Swap the box for the visible rectangle so layout and aspect match.
   for (const b of data.blocks) {
@@ -245,15 +253,17 @@ async function importStudy(study) {
     const atAttr = at ? ` at={[${at.join(", ")}]}` : ` ratio="${b.w} / ${b.h}"`;
     const capAttr = cap ? ` caption=${attr(cap)}` : "";
     const slotAttr = (slot ? ` slot="${slot}"` : "") + (offset > 8 ? ` offset={${offset}}` : "");
+    const speed = speedFor(b);
+    const par = speed ? ` parallax={${speed}}` : "";
     if (b.kind === "video") {
-      return `<Video src="/media/${study.slug}/${fileOf(b.src)}" label=${attr(cap ?? "TODO: describe clip")} ratio="${b.w} / ${b.h}"${at ? ` at={[${at.join(", ")}]}` : ""}${capAttr}${slotAttr} />`;
+      return `<Video src="/media/${study.slug}/${fileOf(b.src)}" label=${attr(cap ?? "TODO: describe clip")} ratio="${b.w} / ${b.h}"${at ? ` at={[${at.join(", ")}]}` : ""}${capAttr}${par}${slotAttr} />`;
     }
     const small = !at && !slot && b.w < 420 ? ` width={${b.w}}` : "";
     // Framer's crop anchor, when it isn't the centre.
     const pos = b.fit === "cover" && b.position && b.position !== "50% 50%" ? ` pos="${b.position}"` : "";
     // Line art (Framer wraps it in mix-blend-mode: multiply) is treated differently from screenshots in dark mode.
     const tone = b.multiply ? ` tone="art"` : "";
-    return `<Figure src={${imgRef(b)}} alt=${attr(cap ?? "TODO: describe image")}${atAttr}${capAttr}${small}${pos}${tone}${slotAttr} />`;
+    return `<Figure src={${imgRef(b)}} alt=${attr(cap ?? "TODO: describe image")}${atAttr}${capAttr}${small}${pos}${tone}${par}${slotAttr} />`;
   };
   const isMedia = (b) => b.kind === "img" || b.kind === "video";
   const overlapsY = (a, b) => a.y < b.y + b.h && b.y < a.y + a.h;
