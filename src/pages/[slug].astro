@@ -52,7 +52,7 @@ const next = await getEntry(entry.data.next);
         <nav class="page mt-24 border-t border-line pt-12" aria-label="Next case study">
           <a href={`/${next.id}`} class="group block">
             <span class="text-label text-muted">Next: {next.data.client}</span>
-            <span class="mt-2 flex items-center gap-4 font-display text-heading font-medium">
+            <span class="w-2/3 mt-2 flex items-center gap-4 font-display text-intro font-medium">
               {next.data.title}
               <span aria-hidden="true" class="text-brand transition-transform group-hover:translate-x-2">→</span>
             </span>

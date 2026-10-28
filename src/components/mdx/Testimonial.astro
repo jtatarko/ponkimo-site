@@ -13,7 +13,7 @@ const { name, role, avatar, gap } = Astro.props;
 ---
 
 <figure
-  class="page reveal my-12 text-center lg:my-20"
+  class="page reveal my-12 lg:my-30"
   data-gap={gap !== undefined ? "" : undefined}
   style={gap !== undefined ? `--gap:${gap}` : undefined}
 >
@@ -26,7 +26,7 @@ const { name, role, avatar, gap } = Astro.props;
       {avatar && <Image src={avatar} alt="" width={54} height={54} class="size-[54px] rounded-full object-cover" />}
       <span>
         <span class="block text-intro font-semibold">{name}</span>
-        {role && <span class="block text-caption text-muted">{role}</span>}
+        {role && <span class="w-1/2 block text-caption text-muted">{role}</span>}
       </span>
     </figcaption>
   </div>
