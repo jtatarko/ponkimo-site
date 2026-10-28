@@ -111,19 +111,47 @@
 
     type Wobbly = { el: SVGPathElement; x: number[]; y: number[]; w: number[]; live: number; tail: string };
 
+    // Flatten the path data (absolute M / L / C only) in one pass. Avoid
+    // getPointAtLength here: it is O(path length) per call, which freezes the page.
     function sample(el: SVGPathElement): Wobbly {
-      const length = el.getTotalLength();
-      const n = Math.ceil(length / STEP);
+      const nums = (el.getAttribute("d") ?? "").match(/[MLC]|-?\d*\.?\d+/g) ?? [];
       const x: number[] = [];
       const y: number[] = [];
-      const w: number[] = [];
-      for (let i = 0; i <= n; i++) {
-        const p = el.getPointAtLength((i / n) * length);
-        const t = clamp01((p.x - CALM_FROM) / (CALM_TO - CALM_FROM));
-        x.push(p.x);
-        y.push(p.y);
-        w.push(1 - t * t * (3 - 2 * t));
+      let cmd = "M";
+      let cx = 0;
+      let cy = 0;
+      for (let i = 0; i < nums.length; ) {
+        if (/[MLC]/.test(nums[i])) cmd = nums[i++];
+        const n = cmd === "C" ? 6 : 2;
+        const v = nums.slice(i, i + n).map(Number);
+        i += n;
+        const ex = v[n - 2];
+        const ey = v[n - 1];
+        if (cmd === "M") {
+          x.push(ex);
+          y.push(ey);
+        } else {
+          const [x1, y1, x2, y2] = cmd === "C" ? v : [cx, cy, ex, ey];
+          const guess = Math.hypot(x1 - cx, y1 - cy) + Math.hypot(x2 - x1, y2 - y1) + Math.hypot(ex - x2, ey - y2);
+          const steps = Math.max(1, Math.ceil(guess / STEP));
+          for (let k = 1; k <= steps; k++) {
+            const t = k / steps;
+            const m = 1 - t;
+            const b0 = m * m * m;
+            const b1 = 3 * m * m * t;
+            const b2 = 3 * m * t * t;
+            const b3 = t * t * t;
+            x.push(b0 * cx + b1 * x1 + b2 * x2 + b3 * ex);
+            y.push(b0 * cy + b1 * y1 + b2 * y2 + b3 * ey);
+          }
+        }
+        cx = ex;
+        cy = ey;
       }
+      const w = x.map((px) => {
+        const t = clamp01((px - CALM_FROM) / (CALM_TO - CALM_FROM));
+        return 1 - t * t * (3 - 2 * t);
+      });
       // Everything after the last point that can move is static: bake it once.
       let live = w.length;
       while (live > 0 && w[live - 1] === 0) live--;

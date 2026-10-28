@@ -1,13 +1,13 @@
 ---
-import Venn from "../../assets/svg/venn.svg";
+import VennDiagram from "./VennDiagram.astro";
 import Arrow from "../../assets/svg/arrow.svg";
 ---
 
-<section class="page mt-20 grid items-center gap-12 lg:grid-cols-2">
+<section class="page mt-20 grid items-center gap-12 lg:grid-cols-2" data-venn-section>
   <div class="reveal max-w-[35rem] space-y-8 text-intro lg:pl-6">
     <p>
       <Arrow class="inline-block h-[0.45em] w-[0.75em] align-middle" aria-hidden="true" /> Future-tech designer &amp;
-      product owner with 10+ years of experience transforming complex systems into desirable, feasible, and viable
+      product owner with 10+ years of experience transforming complex systems into <span class="venn-hl" style="--at:0.55">desirable</span>, <span class="venn-hl" style="--at:1">feasible</span>, and <span class="venn-hl" style="--at:1.45">viable</span>
       products: combining data and creativity to discover the “<em>What</em>” and engineer the “<em>How</em>.”
     </p>
     <p>
@@ -15,11 +15,40 @@ import Arrow from "../../assets/svg/arrow.svg";
       teams where design becomes the catalyst for innovation that scales.
     </p>
   </div>
-  <figure class="reveal mx-auto w-full max-w-[460px]">
-    <Venn
-      class="h-auto w-full"
-      role="img"
-      aria-label="Venn diagram: where Desirable, Feasible and Viable overlap"
-    />
+  <figure class="mx-auto w-full max-w-[460px]" data-venn>
+    <VennDiagram />
   </figure>
 </section>
+
+<style>
+  /* Underline wipes in as the matching circle draws; stays as a quiet accent. */
+  .venn-hl {
+    background: linear-gradient(var(--color-brand), var(--color-brand)) no-repeat 0 100% / 100% 2px;
+    padding-bottom: 0.08em;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .venn-hl { background-size: 0% 2px; }
+    :global(.venn-playing) .venn-hl {
+      background-size: 100% 2px;
+      transition: background-size 0.7s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--at) * 1s + 0.2s);
+    }
+  }
+</style>
+
+<script>
+  // Play the Venn (and the highlighted words) once, when the diagram is half on screen.
+  const section = document.querySelector<HTMLElement>("[data-venn-section]");
+  const figure = section?.querySelector("[data-venn]");
+  if (section && figure) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          section.classList.add("venn-playing");
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(figure);
+  }
+</script>
