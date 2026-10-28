@@ -35,7 +35,7 @@ const { src, alt, caption, at, ratio, width, pos, tone = "shot", parallax, offse
 const [x, y, w, h] = at ?? [];
 const box = at && h ? `${w} / ${h}` : ratio;
 const sizes = at
-  ? `(min-width: 1024px) ${Math.round((w! / 1440) * 100)}vw, 100vw`
+  ? `(min-width: 1024px) ${Math.round(((w ?? 1440) / 1440) * 100)}vw, 100vw`
   : width
     ? `${width}px`
     : "(min-width: 1024px) 560px, 100vw";
