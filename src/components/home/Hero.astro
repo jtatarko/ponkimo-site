@@ -1,7 +1,6 @@
 ---
-import { Image } from "astro:assets";
 import Mark from "../../assets/svg/mark.svg";
-import process from "../../assets/home/process-scribble.svg";
+import ProcessScribble from "./ProcessScribble.astro";
 import { site } from "../../data/site";
 ---
 
@@ -19,14 +18,9 @@ import { site } from "../../data/site";
     </div>
   </div>
 
-  <!-- Research -> Concept -> Design scribble: ambiguity resolving into clarity. -->
-  <figure class="reveal mt-16 lg:mt-20 lg:px-16" data-parallax="-0.08" data-parallax-from="top" data-parallax-clamp="1200">
-    <Image
-      src={process}
-      alt="A tangled line that gradually straightens out, moving from Research (ambiguity, patterns, insights) through Concept to Design (clarity, focus)."
-      class="h-auto w-full"
-      loading="eager"
-    />
+  <!-- Research -> Concept -> Design scribble: ambiguity resolving into clarity. Draws itself on load. -->
+  <figure class="mt-16 lg:mt-20 lg:px-16" data-parallax="-0.08" data-parallax-from="top" data-parallax-clamp="1200">
+    <ProcessScribble />
   </figure>
 
   <!-- Bullets trail each skill so a wrapped line never starts with one. -->
