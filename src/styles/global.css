@@ -126,6 +126,19 @@
   }
 }
 
+/*
+ * Case-study title entrance, matching Framer: starts 80px low and invisible,
+ * then rises on a strong ease-out (most of the travel in the first ~200ms,
+ * settled by ~1s, finishing at 1.8s). Runs on load, no JS; skipped for reduced motion.
+ */
+@keyframes hero-title-in {
+  from { opacity: 0; transform: translateY(80px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title { animation: hero-title-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+}
+
 /* Reveal-on-scroll; JS adds .is-visible. Disabled for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal:not(.is-visible) { opacity: 0; transform: translateY(24px); }

@@ -34,13 +34,14 @@ const next = await getEntry(entry.data.next);
             sizes="(min-width: 1024px) 576px, 100vw"
             loading="eager"
             fetchpriority="high"
-            class="reveal mx-auto mb-8 h-auto w-full max-w-[24rem] lg:absolute lg:top-[5rem] lg:right-gutter lg:mb-0 lg:w-[40%] lg:max-w-[36rem] dark:opacity-65 dark:mix-blend-screen dark:invert"
+            class="mx-auto mb-8 h-auto w-full max-w-[24rem] lg:absolute lg:top-[5rem] lg:right-gutter lg:mb-0 lg:w-[40%] lg:max-w-[36rem] dark:opacity-65 dark:mix-blend-screen dark:invert"
           />
         )
       }
       <div class="relative">
-        <Mark class="reveal h-[68px] w-[72px]" aria-hidden="true" />
-        <h1 class="reveal mt-4 max-w-[50rem] text-title">{entry.data.title}</h1>
+        <Mark class="h-[68px] w-[72px]" aria-hidden="true" />
+        <!-- Only the title animates in, as on Framer; mark, illustration and lead are static. -->
+        <h1 class="hero-title mt-4 max-w-[50rem] text-title">{entry.data.title}</h1>
       </div>
     </header>
 
