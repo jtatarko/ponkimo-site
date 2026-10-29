@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import Nav from "../components/Nav.astro";
+import ReadingProgress from "../components/ReadingProgress.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../data/site";
 
@@ -12,9 +13,11 @@ interface Props {
   ogImage?: ImageMetadata;
   /** Shown at the right of the nav on case-study pages. */
   next?: { href: string; label: string };
+  /** Show the reading-progress bar (case studies). */
+  progress?: boolean;
 }
 
-const { title, description = site.description, ogImage, next } = Astro.props;
+const { title, description = site.description, ogImage, next, progress } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = ogImage
@@ -49,6 +52,7 @@ const og = ogImage
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-bg focus:px-3 focus:py-2"
       >Skip to content</a
     >
+    {progress && <ReadingProgress />}
     <Nav next={next} />
     <main id="main" class="relative z-10 overflow-x-clip bg-bg pb-24">
       <slot />

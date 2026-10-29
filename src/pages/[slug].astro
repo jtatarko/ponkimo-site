@@ -20,6 +20,7 @@ const next = await getEntry(entry.data.next);
   title={entry.data.title}
   description={entry.data.description}
   ogImage={entry.data.hero ?? entry.data.cardIllustration}
+  progress
   next={next && { href: `/${next.id}`, label: next.data.title }}
 >
   <article>
