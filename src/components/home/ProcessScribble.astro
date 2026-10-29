@@ -105,7 +105,7 @@
     // Amplitude fades to zero between CALM_FROM and CALM_TO (viewBox x), so the
     // straight end never moves. Vector all the way, so lines stay crisp.
     const STEP = 5;
-    const AMPLITUDE = 11;
+    const AMPLITUDE = 9;
     const CALM_FROM = 700;
     const CALM_TO = 1350;
 
@@ -168,8 +168,8 @@
         const px = l.x[i];
         const py = l.y[i];
         const a = AMPLITUDE * ramp * l.w[i];
-        const dx = a * (Math.sin(px * 0.011 + py * 0.007 + t * 1.25) + Math.sin(py * 0.013 - px * 0.005 + t * 0.85)) * 0.5;
-        const dy = a * (Math.sin(py * 0.012 - px * 0.006 + t * 1.0) + Math.sin(px * 0.009 + py * 0.01 - t * 0.7)) * 0.5;
+        const dx = a * (Math.sin(px * 0.011 + py * 0.007 + t * 1.08) + Math.sin(py * 0.013 - px * 0.005 + t * 0.72)) * 0.5;
+        const dy = a * (Math.sin(py * 0.012 - px * 0.006 + t * 0.84) + Math.sin(px * 0.009 + py * 0.01 - t * 0.6)) * 0.5;
         d += `${i ? "L" : "M"}${(px + dx).toFixed(1)} ${(py + dy).toFixed(1)}`;
       }
       l.el.setAttribute("d", d + l.tail);
