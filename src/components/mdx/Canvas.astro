@@ -8,7 +8,9 @@
  * percentage, so overlaps and offsets survive at any width. Below lg the
  * children simply stack in source order, unless the canvas has `mh`: then it
  * reproduces Framer's 390px mobile layout, edge to edge, scaled with the
- * viewport. Children place themselves with `m` (see Figure, Caption, Video).
+ * viewport. Children place themselves with `m` (see Figure, Caption, Video);
+ * those without it are hidden there, as Framer hid them. `hideMobile` hides
+ * the whole canvas below lg.
  */
 interface Props {
   /** Canvas height in Framer pixels (at 1440px width). */
@@ -17,12 +19,13 @@ interface Props {
   gap?: number;
   /** Canvas height in Framer pixels on mobile (at 390px width). */
   mh?: number;
+  hideMobile?: boolean;
 }
-const { h, gap, mh } = Astro.props;
+const { h, gap, mh, hideMobile } = Astro.props;
 ---
 
 <div
-  class:list={["canvas my-10 lg:my-12", !mh && "max-lg:px-gutter"]}
+  class:list={["canvas my-10 lg:my-12", !mh && "max-lg:px-gutter", hideMobile && "max-lg:hidden"]}
   data-gap={gap !== undefined ? "" : undefined}
   data-mh={mh !== undefined ? "" : undefined}
   style={`--h:${h}` + (gap !== undefined ? `;--gap:${gap}` : "") + (mh !== undefined ? `;--mh:${mh}` : "")}
@@ -113,6 +116,46 @@ const { h, gap, mh } = Astro.props;
       left: calc(var(--mx) * var(--u));
       top: calc(var(--my) * var(--u));
       width: calc(var(--mw) * var(--u));
+    }
+    .canvas[data-mh] .canvas-frame > p[data-m] {
+      position: absolute;
+      grid-area: 2 / 1;
+      left: calc(var(--mx) * var(--u));
+      top: calc(var(--my) * var(--u));
+      width: calc(var(--mw) * var(--u));
+      margin: 0;
+      padding: 0;
+    }
+    /* No mobile placement: Framer didn't show it on mobile either. */
+    .canvas[data-mh] .canvas-frame > figure:not(.m-figure, [data-m]) {
+      display: none;
+    }
+
+    /* Captions attached to their own image, inside the image area. */
+    .canvas[data-mh] .m-figure:is([data-mcap="above-image"], [data-mcap="below-image"]) > figcaption {
+      position: absolute;
+      grid-area: 2 / 1;
+      inset-inline: 0;
+      top: calc(var(--capy) * var(--u));
+      margin: var(--spacing-caption) 0 0;
+    }
+    .canvas[data-mh] .m-figure[data-mcap="above-image"] > figcaption {
+      margin: 0;
+      translate: 0 calc(-100% - var(--spacing-caption));
+    }
+    /* Clamped to the visible screen, with Framer's 32px margin where the clip bleeds. */
+    .canvas[data-mh] .canvas-frame > figure[data-m] > figcaption {
+      position: absolute;
+      left: 0;
+      width: calc(min(var(--mw), 390 - var(--mx)) * var(--u));
+      padding-left: calc(max(0, 32 - var(--mx)) * var(--u));
+      padding-right: calc(clamp(0, var(--mx) + var(--mw) - 358, 32) * var(--u));
+      bottom: calc(100% + var(--spacing-caption));
+      margin: 0;
+    }
+    .canvas[data-mh] .canvas-frame > figure[data-m][data-mcap="below-image"] > figcaption {
+      top: calc(100% + var(--spacing-caption));
+      bottom: auto;
     }
   }
 </style>

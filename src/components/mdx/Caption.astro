@@ -4,11 +4,17 @@ interface Props {
   at: [number, number, number];
   /** Inside a <Canvas mh> on mobile: above (default) or below the image area. */
   mcap?: "above" | "below";
+  /**
+   * Or a fixed spot inside the image area, [x, y, w] in px on a 390px frame,
+   * for a label that belongs to one image (set y one caption gap below it).
+   */
+  m?: [number, number, number];
 }
-const { at, mcap = "above" } = Astro.props;
+const { at, mcap = "above", m } = Astro.props;
 const [x, y, w] = at;
+const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
 ---
 
-<p data-at data-mcap={mcap} class="text-caption text-muted" style={`--x:${x};--y:${y};--w:${w}`}>
+<p data-at data-m={m ? "" : undefined} data-mcap={m ? undefined : mcap} class="text-caption text-muted" style={`--x:${x};--y:${y};--w:${w}` + mStyle}>
   <slot />
 </p>

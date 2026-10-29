@@ -10,12 +10,14 @@ interface Props {
   at?: [number, number, number, number?];
   /** Mobile placement inside a <Canvas mh>: [x, y, w] in px on a 390px-wide frame, y from the top of the image area. */
   m?: [number, number, number];
+  /** Mobile caption placement inside a <Canvas mh>: directly above or below the clip. */
+  mcap?: "above-image" | "below-image";
   /** Scroll parallax speed (fraction of scroll; negative moves faster). Desktop only. */
   parallax?: number;
   /** Intrinsic aspect ratio, avoids layout shift before metadata loads. */
   ratio?: string;
 }
-const { src, label, poster, caption, at, m, parallax, ratio = "16 / 9" } = Astro.props;
+const { src, label, poster, caption, at, m, mcap = "above-image", parallax, ratio = "16 / 9" } = Astro.props;
 const [x, y, w] = at ?? [];
 const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
 ---
@@ -24,6 +26,7 @@ const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
   data-parallax={parallax}
   data-at={at ? "" : undefined}
   data-m={m ? "" : undefined}
+  data-mcap={m ? mcap : undefined}
   style={(at ? `--x:${x};--y:${y};--w:${w}` : "") + mStyle || undefined}
   class:list={["reveal", !at && "my-10 lg:my-12"]}
 >

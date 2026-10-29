@@ -12,7 +12,10 @@ import type { ImageMetadata } from "astro";
  * a full-width frame (`y`, `h`, px from the top of the canvas's image area)
  * that clips the image box `img` ([x, y, w, h] inside the frame; defaults to
  * filling it). Pass several frames to show different crops of one image.
- * The caption then sits above or below the whole image area (`mcap`).
+ * The caption sits above or below the whole image area (`mcap` "above" /
+ * "below", for the first or last image), or directly above or below this
+ * image inside the layout ("above-image" / "below-image", for images in the
+ * middle of a canvas). Either way it is one caption gap from the image.
  */
 type MobileFrame = { y: number; h: number; img?: [number, number, number, number] };
 
@@ -23,7 +26,7 @@ interface Props {
   at?: [number, number, number, number?];
   m?: MobileFrame | MobileFrame[];
   /** Mobile caption placement inside a <Canvas mh>. */
-  mcap?: "above" | "below";
+  mcap?: "above" | "below" | "above-image" | "below-image";
   /** Box ratio "w / h" for figures outside a canvas. */
   ratio?: string;
   /** Max rendered width in px, for small inline images. */
@@ -36,13 +39,15 @@ interface Props {
   tone?: "art" | "shot";
   /** Crop anchor (CSS object-position) when the box crops the image. */
   pos?: string;
+  /** Crop anchor for the mobile frames, when it differs from `pos`. */
+  mpos?: string;
   /** Scroll parallax speed (fraction of scroll; negative moves faster). Desktop only. */
   parallax?: number;
   /** Extra space above, in px on desktop (aligns an aside with its paragraph). */
   offset?: number;
   class?: string;
 }
-const { src, alt, caption, at, m, mcap, ratio, width, pos, tone = "shot", parallax, offset, class: className } = Astro.props;
+const { src, alt, caption, at, m, mcap, ratio, width, pos, mpos, tone = "shot", parallax, offset, class: className } = Astro.props;
 const [x, y, w, h] = at ?? [];
 const box = at && h ? `${w} / ${h}` : ratio;
 const sizes = at
@@ -57,13 +62,15 @@ const toneClass =
     : "dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100";
 
 const frames = m ? (Array.isArray(m) ? m : [m]) : [];
+// Attached captions are placed from the first frame's top or the last frame's bottom.
+const capY = mcap === "above-image" ? Math.min(...frames.map((f) => f.y)) : Math.max(...frames.map((f) => f.y + f.h));
 ---
 
 <figure
   data-parallax={parallax}
   data-at={at ? "" : undefined}
   data-mcap={frames.length ? (mcap ?? "above") : undefined}
-  style={at ? `--x:${x};--y:${y};--w:${w}` : offset ? `--offset:${offset}px` : undefined}
+  style={(at ? `--x:${x};--y:${y};--w:${w}` : offset ? `--offset:${offset}px` : "") + (mcap?.endsWith("-image") ? `;--capy:${capY}` : "") || undefined}
   class:list={["reveal", !at && "my-10 first:mt-0 lg:my-12", offset && "lg:!mt-[var(--offset)]", frames.length && "m-figure", className]}
 >
   {caption && <figcaption class="mb-caption text-caption text-muted">{caption}</figcaption>}
@@ -85,7 +92,7 @@ const frames = m ? (Array.isArray(m) ? m : [m]) : [];
             alt={i === 0 ? alt : ""}
             sizes={`${Math.round((iw / 390) * 100)}vw`}
             widths={widths}
-            style={`--ix:${ix};--iy:${iy};--iw:${iw};--ih:${ih}` + (pos ? `;object-position:${pos}` : "")}
+            style={`--ix:${ix};--iy:${iy};--iw:${iw};--ih:${ih}` + (mpos || pos ? `;object-position:${mpos ?? pos}` : "")}
             class:list={["object-cover", toneClass]}
           />
         </div>
