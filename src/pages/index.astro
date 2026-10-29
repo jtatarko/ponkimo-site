@@ -5,6 +5,7 @@ import Hero from "../components/home/Hero.astro";
 import Intro from "../components/home/Intro.astro";
 import LogoStrip from "../components/home/LogoStrip.astro";
 import ProjectCard from "../components/home/ProjectCard.astro";
+import Arrow from "../assets/svg/arrow.svg";
 import { site } from "../data/site";
 
 const work = (await getCollection("work", ({ data }) => import.meta.env.DEV || !data.draft)).sort(
@@ -25,8 +26,17 @@ const work = (await getCollection("work", ({ data }) => import.meta.env.DEV || !
 
   <section class="page mt-16 lg:mt-24">
     <p class="reveal text-body lg:px-8">
-      Project from the past long time ago.<br />
-      <a href={site.links.behance} class="text-brand hover:underline" target="_blank" rel="me noopener">Explore</a>
+      Looking for older work?<br />
+      <a
+        href={site.links.behance}
+        class="link-brand inline-flex min-h-11 items-center gap-2"
+        target="_blank"
+        rel="me noopener"
+      >
+        See earlier projects on Behance
+        <Arrow class="h-[9px] w-[14px]" aria-hidden="true" />
+        <span class="sr-only">(opens in a new tab)</span>
+      </a>
     </p>
   </section>
 </BaseLayout>
