@@ -25,6 +25,7 @@
   --color-band: #1a1a1a;
   --color-logo-slab: #d4d4d4;
   --color-on-band: #fff;
+  --color-on-brand: #fff;
 
   /* Fluid type: mobile value -> desktop value at 1440px */
   --text-display: clamp(3rem, 1.6rem + 5.6vw, 6.75rem);
@@ -47,21 +48,25 @@
   --container-page: 90rem;
   --spacing-gutter: clamp(1rem, 5.5vw, 5rem);
   --spacing-nav: 4rem;
+  /* Between a caption and the image it describes (8px grid). */
+  --spacing-caption: 1rem;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #1d1d1d;
+    --color-bg: #101010;
     --color-content: #9e9e9e;
     /* Framer used #545454 here (~2.3:1); lifted to pass WCAG AA on bg. */
     --color-muted: #868686;
     --color-line: #363636;
     --color-brand: #7088ff;
-    --color-nav: #1d1d1de6;
+    --color-nav: #101010e6;
     --color-band: #111;
     --color-on-band: #e6e6e6;
+    /* White on the lighter dark-mode brand is only ~3.2:1; ink passes AA (~6:1). */
+    --color-on-brand: #101010;
   }
 }
 
@@ -71,6 +76,7 @@
     scroll-padding-top: calc(var(--spacing-nav) + 1rem);
     -webkit-text-size-adjust: 100%;
   }
+
   body {
     background: var(--color-bg);
     color: var(--color-content);
@@ -81,13 +87,24 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
-  h1, h2, h3 {
+
+  h1,
+  h2,
+  h3 {
     font-family: var(--font-display);
     font-weight: 500;
     text-wrap: balance;
   }
-  p { text-wrap: pretty; }
-  ::selection { background: var(--color-brand); color: #fff; }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-brand);
     outline-offset: 3px;
@@ -106,19 +123,51 @@
   color: var(--color-brand);
   font-weight: 600;
   text-decoration: none;
-  &:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
 }
 
 /* Long-form case-study text column. */
 @utility prose-cs {
-  & > * + * { margin-top: 1.25em; }
-  & a { color: var(--color-brand); text-decoration: underline; text-underline-offset: 0.2em; }
-  & strong { font-weight: 600; color: var(--color-content); }
-  & ul, & ol { padding-left: 1.25em; }
-  & ul { list-style: disc; }
-  & ol { list-style: decimal; }
-  & li + li { margin-top: 0.5em; }
-  & li::marker { color: var(--color-muted); }
+  &>*+* {
+    margin-top: 1.25em;
+  }
+
+  & a {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  & strong {
+    font-weight: 600;
+    color: var(--color-content);
+  }
+
+  & ul,
+  & ol {
+    padding-left: 1.25em;
+  }
+
+  & ul {
+    list-style: disc;
+  }
+
+  & ol {
+    list-style: decimal;
+  }
+
+  & li+li {
+    margin-top: 0.5em;
+  }
+
+  & li::marker {
+    color: var(--color-muted);
+  }
+
   & blockquote {
     border-left: 2px solid var(--color-brand);
     padding-left: 1em;
@@ -132,17 +181,33 @@
  * settled by ~1s, finishing at 1.8s). Runs on load, no JS; skipped for reduced motion.
  */
 @keyframes hero-title-in {
-  from { opacity: 0; transform: translateY(80px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
+
 @media (prefers-reduced-motion: no-preference) {
-  .hero-title { animation: hero-title-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+  .hero-title {
+    animation: hero-title-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  }
 }
 
 /* Reveal-on-scroll; JS adds .is-visible. Disabled for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
-  .reveal:not(.is-visible) { opacity: 0; transform: translateY(24px); }
-  .reveal { transition: opacity 0.8s var(--ease-out-soft), transform 0.8s var(--ease-out-soft); }
+  .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .reveal {
+    transition: opacity 0.8s var(--ease-out-soft), transform 0.8s var(--ease-out-soft);
+  }
 }
 
 /*
@@ -155,10 +220,12 @@
     margin-top: calc(var(--gap) / 1440 * min(100vw, var(--container-page))) !important;
     margin-bottom: 0 !important;
   }
+
   section[data-gap] {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
+
   /* Chapter breaks: hairline halfway through the gap. */
   section[data-gap][data-divider] {
     margin-top: calc(var(--gap) / 2880 * min(100vw, var(--container-page))) !important;

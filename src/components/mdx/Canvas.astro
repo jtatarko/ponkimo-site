@@ -6,21 +6,26 @@
  * pixels on a 1440px-wide frame, `y` relative to the top of this canvas.
  * On desktop the canvas keeps the 1440:h proportion and places children by
  * percentage, so overlaps and offsets survive at any width. Below lg the
- * children simply stack in source order.
+ * children simply stack in source order, unless the canvas has `mh`: then it
+ * reproduces Framer's 390px mobile layout, edge to edge, scaled with the
+ * viewport. Children place themselves with `m` (see Figure, Caption, Video).
  */
 interface Props {
   /** Canvas height in Framer pixels (at 1440px width). */
   h: number;
   /** Framer px of space above this block at 1440 wide (desktop only). */
   gap?: number;
+  /** Canvas height in Framer pixels on mobile (at 390px width). */
+  mh?: number;
 }
-const { h, gap } = Astro.props;
+const { h, gap, mh } = Astro.props;
 ---
 
 <div
-  class="canvas my-10 max-lg:px-gutter lg:my-12"
+  class:list={["canvas my-10 lg:my-12", !mh && "max-lg:px-gutter"]}
   data-gap={gap !== undefined ? "" : undefined}
-  style={`--h:${h}` + (gap !== undefined ? `;--gap:${gap}` : "")}
+  data-mh={mh !== undefined ? "" : undefined}
+  style={`--h:${h}` + (gap !== undefined ? `;--gap:${gap}` : "") + (mh !== undefined ? `;--mh:${mh}` : "")}
 >
   <div class="canvas-frame">
     <slot />
@@ -44,13 +49,70 @@ const { h, gap } = Astro.props;
     }
   }
   @media (max-width: 63.999rem) {
-    .canvas-frame {
+    .canvas:not([data-mh]) .canvas-frame {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
     }
     .canvas-frame > [data-at] {
       margin: 0;
+    }
+
+    /*
+     * Framer's mobile layout: px on a 390px frame, scaled by the frame width.
+     * Three rows: captions above, the image area (absolute layout, mh tall),
+     * captions below. Captions flow, so they keep one caption gap from the
+     * images however many lines they wrap to.
+     */
+    .canvas[data-mh] .canvas-frame {
+      --u: calc(100cqw / 390);
+      position: relative;
+      container-type: inline-size;
+      display: grid;
+      grid-template-rows: auto auto auto;
+    }
+    .canvas[data-mh] .canvas-frame::before {
+      content: "";
+      grid-area: 2 / 1;
+      aspect-ratio: 390 / var(--mh);
+    }
+    .canvas[data-mh] .canvas-frame > p,
+    .canvas[data-mh] .m-figure > figcaption {
+      grid-area: 1 / 1;
+      margin: 0 0 var(--spacing-caption);
+      padding-inline: calc(32 * var(--u));
+    }
+    .canvas[data-mh] .canvas-frame > p[data-mcap="below"],
+    .canvas[data-mh] .m-figure[data-mcap="below"] > figcaption {
+      grid-area: 3 / 1;
+      margin: var(--spacing-caption) 0 0;
+    }
+    /* Figures dissolve so their caption and frames join the grid directly. */
+    .canvas[data-mh] .canvas-frame > .m-figure {
+      display: contents;
+    }
+    .canvas[data-mh] .m-frame {
+      position: absolute;
+      grid-area: 2 / 1;
+      inset-inline: 0;
+      top: calc(var(--fy) * var(--u));
+      height: calc(var(--fh) * var(--u));
+      overflow: hidden;
+    }
+    .canvas[data-mh] .m-frame > img {
+      position: absolute;
+      max-width: none;
+      left: calc(var(--ix) * var(--u));
+      top: calc(var(--iy) * var(--u));
+      width: calc(var(--iw) * var(--u));
+      height: calc(var(--ih) * var(--u));
+    }
+    .canvas[data-mh] .canvas-frame > figure[data-m] {
+      position: absolute;
+      grid-area: 2 / 1;
+      left: calc(var(--mx) * var(--u));
+      top: calc(var(--my) * var(--u));
+      width: calc(var(--mw) * var(--u));
     }
   }
 </style>

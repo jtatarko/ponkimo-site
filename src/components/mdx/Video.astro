@@ -8,22 +8,26 @@ interface Props {
   caption?: string;
   /** Placement inside a <Canvas>, in Framer pixels: [x, y, w, h?]. */
   at?: [number, number, number, number?];
+  /** Mobile placement inside a <Canvas mh>: [x, y, w] in px on a 390px-wide frame, y from the top of the image area. */
+  m?: [number, number, number];
   /** Scroll parallax speed (fraction of scroll; negative moves faster). Desktop only. */
   parallax?: number;
   /** Intrinsic aspect ratio, avoids layout shift before metadata loads. */
   ratio?: string;
 }
-const { src, label, poster, caption, at, parallax, ratio = "16 / 9" } = Astro.props;
+const { src, label, poster, caption, at, m, parallax, ratio = "16 / 9" } = Astro.props;
 const [x, y, w] = at ?? [];
+const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
 ---
 
 <figure
   data-parallax={parallax}
   data-at={at ? "" : undefined}
-  style={at ? `--x:${x};--y:${y};--w:${w}` : undefined}
+  data-m={m ? "" : undefined}
+  style={(at ? `--x:${x};--y:${y};--w:${w}` : "") + mStyle || undefined}
   class:list={["reveal", !at && "my-10 lg:my-12"]}
 >
-  {caption && <figcaption class="mb-3 text-caption text-muted">{caption}</figcaption>}
+  {caption && <figcaption class="mb-caption text-caption text-muted">{caption}</figcaption>}
   <video
     class="h-auto w-full rounded-lg bg-line/30 object-cover dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100"
     style={`aspect-ratio:${ratio}`}

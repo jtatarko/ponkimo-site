@@ -7,12 +7,23 @@ import type { ImageMetadata } from "astro";
  * Inside a <Canvas>, pass `at={[x, y, w, h]}` in Framer pixels to place it.
  * When the box ratio differs from the file, the image is cropped to the box
  * (object-fit: cover), which is what Framer did.
+ *
+ * Inside a <Canvas mh>, `m` places it on mobile using Framer's 390px layout:
+ * a full-width frame (`y`, `h`, px from the top of the canvas's image area)
+ * that clips the image box `img` ([x, y, w, h] inside the frame; defaults to
+ * filling it). Pass several frames to show different crops of one image.
+ * The caption then sits above or below the whole image area (`mcap`).
  */
+type MobileFrame = { y: number; h: number; img?: [number, number, number, number] };
+
 interface Props {
   src: ImageMetadata;
   alt: string;
   caption?: string;
   at?: [number, number, number, number?];
+  m?: MobileFrame | MobileFrame[];
+  /** Mobile caption placement inside a <Canvas mh>. */
+  mcap?: "above" | "below";
   /** Box ratio "w / h" for figures outside a canvas. */
   ratio?: string;
   /** Max rendered width in px, for small inline images. */
@@ -31,7 +42,7 @@ interface Props {
   offset?: number;
   class?: string;
 }
-const { src, alt, caption, at, ratio, width, pos, tone = "shot", parallax, offset, class: className } = Astro.props;
+const { src, alt, caption, at, m, mcap, ratio, width, pos, tone = "shot", parallax, offset, class: className } = Astro.props;
 const [x, y, w, h] = at ?? [];
 const box = at && h ? `${w} / ${h}` : ratio;
 const sizes = at
@@ -39,27 +50,46 @@ const sizes = at
   : width
     ? `${width}px`
     : "(min-width: 1024px) 560px, 100vw";
+const widths = [480, 800, 1200, 1600, 2400].filter((v) => v <= src.width);
+const toneClass =
+  tone === "art"
+    ? "dark:opacity-65 dark:mix-blend-screen dark:invert"
+    : "dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100";
+
+const frames = m ? (Array.isArray(m) ? m : [m]) : [];
 ---
 
 <figure
   data-parallax={parallax}
   data-at={at ? "" : undefined}
+  data-mcap={frames.length ? (mcap ?? "above") : undefined}
   style={at ? `--x:${x};--y:${y};--w:${w}` : offset ? `--offset:${offset}px` : undefined}
-  class:list={["reveal", !at && "my-10 first:mt-0 lg:my-12", offset && "lg:!mt-[var(--offset)]", className]}
+  class:list={["reveal", !at && "my-10 first:mt-0 lg:my-12", offset && "lg:!mt-[var(--offset)]", frames.length && "m-figure", className]}
 >
-  {caption && <figcaption class="mb-3 text-caption text-muted">{caption}</figcaption>}
+  {caption && <figcaption class="mb-caption text-caption text-muted">{caption}</figcaption>}
   <Image
     src={src}
     alt={alt}
     sizes={sizes}
-    widths={[480, 800, 1200, 1600, 2400].filter((v) => v <= src.width)}
+    widths={widths}
     style={[box && `aspect-ratio:${box}`, width && `max-width:${width}px`, pos && `object-position:${pos}`].filter(Boolean).join(";") || undefined}
-    class:list={[
-      "w-full",
-      box ? "object-cover" : "h-auto",
-      tone === "art"
-        ? "dark:opacity-65 dark:mix-blend-screen dark:invert"
-        : "dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100",
-    ]}
+    class:list={["w-full", box ? "object-cover" : "h-auto", toneClass, frames.length && "max-lg:hidden"]}
   />
+  {
+    frames.map((f, i) => {
+      const [ix, iy, iw, ih] = f.img ?? [0, 0, 390, f.h];
+      return (
+        <div class="m-frame lg:hidden" style={`--fy:${f.y};--fh:${f.h}`}>
+          <Image
+            src={src}
+            alt={i === 0 ? alt : ""}
+            sizes={`${Math.round((iw / 390) * 100)}vw`}
+            widths={widths}
+            style={`--ix:${ix};--iy:${iy};--iw:${iw};--ih:${ih}` + (pos ? `;object-position:${pos}` : "")}
+            class:list={["object-cover", toneClass]}
+          />
+        </div>
+      );
+    })
+  }
 </figure>

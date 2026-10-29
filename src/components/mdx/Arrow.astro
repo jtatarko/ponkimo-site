@@ -1,0 +1,25 @@
+---
+import ArrowIcon from "../../assets/svg/arrow.svg";
+
+/** Link-button arrow placed inside a <Canvas>, centred on `at={[x, y, w]}` (Framer px). Desktop only. */
+interface Props {
+  at: [number, number, number];
+}
+const { at } = Astro.props;
+const [x, y, w] = at;
+---
+
+<ArrowIcon
+  data-at
+  class="canvas-arrow text-brand max-lg:hidden"
+  style={`--x:${x};--y:${y};--w:${w}`}
+  aria-hidden="true"
+/>
+
+<style is:global>
+  .canvas-arrow {
+    height: auto;
+    aspect-ratio: 14 / 9;
+    transform: translate(-50%, -50%);
+  }
+</style>

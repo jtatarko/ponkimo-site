@@ -2,10 +2,13 @@
 /** Small label placed inside a <Canvas>, e.g. above an image group. */
 interface Props {
   at: [number, number, number];
+  /** Inside a <Canvas mh> on mobile: above (default) or below the image area. */
+  mcap?: "above" | "below";
 }
-const [x, y, w] = Astro.props.at;
+const { at, mcap = "above" } = Astro.props;
+const [x, y, w] = at;
 ---
 
-<p data-at class="text-caption text-muted" style={`--x:${x};--y:${y};--w:${w}`}>
+<p data-at data-mcap={mcap} class="text-caption text-muted" style={`--x:${x};--y:${y};--w:${w}`}>
   <slot />
 </p>
