@@ -34,9 +34,11 @@ interface Props {
   /**
    * "art": line art on white (Framer's multiply-blended images). In dark mode it
    * is inverted and screened into the page at reduced opacity.
+   * "diagram": transparent black-on-colour charts. In dark mode the lightness is
+   * flipped (black text turns white) and the hue rotated back so colours stay put.
    * "shot" (default): screenshots, dimmed slightly in dark mode.
    */
-  tone?: "art" | "shot";
+  tone?: "art" | "diagram" | "shot";
   /** Crop anchor (CSS object-position) when the box crops the image. */
   pos?: string;
   /** Crop anchor for the mobile frames, when it differs from `pos`. */
@@ -59,7 +61,9 @@ const widths = [480, 800, 1200, 1600, 2400].filter((v) => v <= src.width);
 const toneClass =
   tone === "art"
     ? "dark:opacity-65 dark:mix-blend-screen dark:invert"
-    : "dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100";
+    : tone === "diagram"
+      ? "dark:opacity-65 dark:invert dark:hue-rotate-180"
+      : "dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100";
 
 const frames = m ? (Array.isArray(m) ? m : [m]) : [];
 // Attached captions are placed from the first frame's top or the last frame's bottom.
