@@ -7,3 +7,4 @@ dist/
 # Framer extraction dumps (regenerable, source of truth is src/content)
 scripts/framer-extract/
 reference/
+.playwright-mcp/

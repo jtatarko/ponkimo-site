@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ponkimo.com/sitemap-index.xml
