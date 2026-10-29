@@ -50,6 +50,8 @@
   --spacing-nav: 4rem;
   /* Between a caption and the image it describes (8px grid). */
   --spacing-caption: 1rem;
+  /* Least space between text and its neighbours, and on each side of a hairline. */
+  --spacing-clearance: 3rem;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -128,6 +130,15 @@
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
+}
+
+/* Highlighting rule: a brand-color background behind the word, never an underline. */
+@utility hl {
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  padding-inline: 0.15em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* Long-form case-study text column. */
@@ -213,12 +224,20 @@
 /*
  * Case-study rhythm on desktop: each top-level block carries the space
  * Framer left above it (--gap, px at 1440 wide), scaled with the viewport.
+ * Text blocks, and whatever follows one, keep at least --spacing-clearance,
+ * so small or zero Framer gaps (and parallax drift) can't make them touch.
  * Below lg the components' own margins apply.
  */
 @media (min-width: 64rem) {
   [data-gap] {
-    margin-top: calc(var(--gap) / 1440 * min(100vw, var(--container-page))) !important;
+    --gap-px: calc(var(--gap) / 1440 * min(100vw, var(--container-page)));
+    margin-top: var(--gap-px) !important;
     margin-bottom: 0 !important;
+  }
+
+  section[data-gap],
+  section + [data-gap] {
+    margin-top: max(var(--gap-px), var(--spacing-clearance)) !important;
   }
 
   section[data-gap] {
@@ -228,7 +247,7 @@
 
   /* Chapter breaks: hairline halfway through the gap. */
   section[data-gap][data-divider] {
-    margin-top: calc(var(--gap) / 2880 * min(100vw, var(--container-page))) !important;
-    padding-top: calc(var(--gap) / 2880 * min(100vw, var(--container-page))) !important;
+    margin-top: max(var(--gap-px) / 2, var(--spacing-clearance)) !important;
+    padding-top: max(var(--gap-px) / 2, var(--spacing-clearance)) !important;
   }
 }

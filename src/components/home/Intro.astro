@@ -7,7 +7,7 @@ import Arrow from "../../assets/svg/arrow.svg";
   <div class="reveal max-w-[35rem] space-y-8 text-intro lg:pl-6">
     <p>
       <Arrow class="inline-block h-[0.45em] w-[0.75em] align-middle" aria-hidden="true" /> Future-tech designer &amp;
-      product owner with 10+ years of experience transforming complex systems into <span class="venn-hl" style="--at:0.55">desirable</span>, <span class="venn-hl" style="--at:1">feasible</span>, and <span class="venn-hl" style="--at:1.45">viable</span>
+      product owner with 10+ years of experience transforming complex systems into <span class="hl venn-hl" style="--at:0.55">desirable</span>, <span class="hl venn-hl" style="--at:1">feasible</span>, and <span class="hl venn-hl" style="--at:1.45">viable</span>
       products: combining data and creativity to discover the “<em>What</em>” and engineer the “<em>How</em>.”
     </p>
     <p>
@@ -21,16 +21,21 @@ import Arrow from "../../assets/svg/arrow.svg";
 </section>
 
 <style>
-  /* Underline wipes in as the matching circle draws; stays as a quiet accent. */
+  /* The .hl background wipes in as the matching circle draws; the text flips to its on-brand color with it. */
   .venn-hl {
-    background: linear-gradient(var(--color-brand), var(--color-brand)) no-repeat 0 100% / 100% 2px;
-    padding-bottom: 0.08em;
+    background: linear-gradient(var(--color-brand), var(--color-brand)) no-repeat 0 0 / 100% 100%;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .venn-hl { background-size: 0% 2px; }
+    .venn-hl {
+      background-size: 0% 100%;
+      color: inherit;
+    }
     :global(.venn-playing) .venn-hl {
-      background-size: 100% 2px;
-      transition: background-size 0.7s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--at) * 1s + 0.2s);
+      background-size: 100% 100%;
+      color: var(--color-on-brand);
+      transition:
+        background-size 0.7s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--at) * 1s + 0.2s),
+        color 0.3s ease calc(var(--at) * 1s + 0.35s);
     }
   }
 </style>

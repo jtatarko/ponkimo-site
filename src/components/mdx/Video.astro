@@ -10,7 +10,7 @@ interface Props {
   at?: [number, number, number, number?];
   /** Mobile placement inside a <Canvas mh>: [x, y, w] in px on a 390px-wide frame, y from the top of the image area. */
   m?: [number, number, number];
-  /** Mobile caption placement inside a <Canvas mh>: directly above or below the clip. */
+  /** Caption directly above or below the clip; inside a <Canvas mh> it sets the mobile placement too. */
   mcap?: "above-image" | "below-image";
   /** Scroll parallax speed (fraction of scroll; negative moves faster). Desktop only. */
   parallax?: number;
@@ -20,6 +20,7 @@ interface Props {
 const { src, label, poster, caption, at, m, mcap = "above-image", parallax, ratio = "16 / 9" } = Astro.props;
 const [x, y, w] = at ?? [];
 const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
+const below = mcap === "below-image";
 ---
 
 <figure
@@ -30,7 +31,7 @@ const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
   style={(at ? `--x:${x};--y:${y};--w:${w}` : "") + mStyle || undefined}
   class:list={["reveal", !at && "my-10 lg:my-12"]}
 >
-  {caption && <figcaption class="mb-caption text-caption text-muted">{caption}</figcaption>}
+  {caption && !below && <figcaption class="mb-caption text-caption text-muted">{caption}</figcaption>}
   <video
     class="h-auto w-full rounded-lg bg-line/30 object-cover dark:brightness-[.8] dark:transition-[filter] dark:duration-300 dark:hover:brightness-100"
     style={`aspect-ratio:${ratio}`}
@@ -42,6 +43,7 @@ const mStyle = m ? `;--mx:${m[0]};--my:${m[1]};--mw:${m[2]}` : "";
     loop
     playsinline
     preload="metadata"></video>
+  {caption && below && <figcaption class="mt-caption text-caption text-muted">{caption}</figcaption>}
 </figure>
 
 <script>
