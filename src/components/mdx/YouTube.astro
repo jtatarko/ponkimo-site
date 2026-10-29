@@ -15,7 +15,7 @@ const thumb = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
   data-gap={gap !== undefined ? "" : undefined}
   style={gap !== undefined ? `--gap:${gap}` : undefined}
 >
-  <div class="relative mx-auto aspect-video max-w-[72rem] overflow-hidden rounded-lg bg-band" data-youtube={id}>
+  <div class="relative aspect-video overflow-hidden rounded-lg bg-band" data-youtube={id}>
     <img src={thumb} alt="" loading="lazy" decoding="async" class="absolute inset-0 size-full object-cover" />
     <button
       type="button"
